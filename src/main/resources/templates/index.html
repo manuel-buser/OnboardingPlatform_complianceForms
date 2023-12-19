@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Customer</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Please enter your Personal Details</h1>
+    <form id="customerForm" th:object="${customer}" class="row">
+        <!-- firstName Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+        </div>
+        <!-- lastName Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="lastName">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+        </div>
+        <!-- birthDate Attribute Field -->
+        <div class="form-group col-md-6">
+        <label for="birthDate">Birth Date:</label>
+        <input type="text" class="form-control" id="birthDate" th:field="*{birthDate}">
+        </div>
+        <!-- nationality Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="nationality">Nationality:</label>
+            <input type="text" class="form-control" id="nationality" th:field="*{nationality}">
+        </div>
+        <!-- streetName Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="streetName">Street Name:</label>
+            <input type="text" class="form-control" id="streetName" th:field="*{streetName}">
+        </div>
+        <!-- streetNumber Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="streetNumber">Street Number:</label>
+            <input type="text" class="form-control" id="streetNumber" th:field="*{streetNumber}">
+        </div>
+        <!-- plzNumber Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="plzNumber">PLZ:</label>
+            <input type="text" class="form-control" id="plzNumber" th:field="*{plzNumber}">
+        </div>
+        <!-- city Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="city">City:</label>
+            <input type="text" class="form-control" id="city" th:field="*{city}">
+        </div>
+        <!-- country Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="country">Country:</label>
+            <input type="text" class="form-control" id="country" th:field="*{country}">
+        </div>
+        <!-- taxCountry Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="taxCountry">Tax Country:</label>
+            <input type="text" class="form-control" id="taxCountry" th:field="*{taxCountry}">
+        </div>
+        <!-- taxIdentificationNumber Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="taxIdentificationNumber">Tax Identification Number:</label>
+            <input type="text" class="form-control" id="taxIdentificationNumber" th:field="*{taxIdentificationNumber}">
+        </div>
+        <!-- phoneNumber Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}">
+        </div>
+        <!-- emailAddress Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="emailAddress">E-Mail:</label>
+            <input type="text" class="form-control" id="emailAddress" th:field="*{emailAddress}">
+        </div>
+        <!-- jobTitle Attribute Field -->
+        <div class="form-group col-md-6">
+            <label for="jobTitle">Job Tytle:</label>
+            <input type="text" class="form-control" id="jobTitle" th:field="*{jobTitle}">
+        </div>
+        <!-- hidden input field to store the ID for the PDF Generation later on -->
+        <input type="hidden" id="customerId" th:value="${customerId}" />
+        <!-- Save your data and Redirect Button -->
+        <button type="button" onclick="saveAndRedirect()" class="btn btn-secondary">Save & Next</button>
+    </form> <!-- Close the customerForm form here -->
+</div>
+<!-- JS Function to send the data to the DB and then redirects to the next page -->
+<script>
+    function saveAndRedirect() {
+        console.log("Button clicked"); // Log to check if the button is triggering the function
+
+        var form = document.getElementById("customerForm");
+        var formData = new FormData(form);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/addCustomer");
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var customerId = xhr.responseText;
+                    console.log("New customer ID:", customerId);
+                    window.location.href = "/complianceForm1";
+                } else {
+                    console.error('Error:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify(Object.fromEntries(formData)));
+    }
+</script>
+
+
+</body>
+</html>

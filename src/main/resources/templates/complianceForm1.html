@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Identifying Economically Beneficial Person</title>
+</head>
+<body>
+
+<h1>Feststellung der letztlich wirtschaftlich berechtigten Person (WB) des Rechtsträgers</h1>
+<form action="/pdf/generate" method="get">
+
+  <!-- Wirtschaftlich Berechtigter Questions -->
+  <h2>1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers</h2>
+  <label>
+    <input type="checkbox" name="identicalToContractPartner"/>
+    Die nachstehende Person ist mit dem Vertragspartner identisch
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="identicalToWealthContributor"/>
+    Die nachstehende Person ist mit dem Vermögenseinbringer identisch
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="memberOfLeadershipBody"/>
+    Die nachstehende Person ist Mitglied des leitenden Organs (Stiftungs-, Verwaltungsrat, Treunehmer)
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="protectorOrSimilar" />
+    Die nachstehende Person ist Protektor, Kurator oder mit ähnlichen Kompetenzen ausgestattete Person
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="beneficiaryOrPotential"/>
+    Die nachstehende Person ist Begünstigte, oder der Kreis von Personen, die als Begünstigte in Frage kommen des obigen Rechtsträgers
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="holdsMoreThan25PercentShares"/>
+    Die nachstehende Person hält Anteile/Stimmrechte von >25% oder ist mit >25% am Gewinn beteiligt
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="exercisesControlOverManagement"/>
+    Die nachstehende Person übt auf andere Weise die Kontrolle über die Geschäftsführung oder letztlich direkt/indirekt die Kontrolle über das Vermögen des obigen Rechtsträgers aus
+  </label><br/>
+
+  <!-- US - Person Questions -->
+  <h2>2. Indizien bezüglich Qualifizierung als US-Person</h2>
+  <label>
+    Ist die oben, unter Ziff. 1 genannte Person ein US-Staatsbürger? Auf die genannte Person treffen folgende Merkmale zu (bitte Fragen durch Ankreuzen beantworten):
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="usCitizen"/>
+    a) Sind Sie im Besitz der US-Staatsbürgerschaft? Sie müssen ebenfalls mit „Ja“ antworten, falls Sie die US-Staatsbürgerschaft als eine
+    von mehreren Staatsbürgerschaften besitzen.
+
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="bornInUSTerritories"/>
+    b) Sind Sie in den USA (oder in einem der US Territorien) geboren? US Territorien: Amerikanisch-Samoa und Swains Island, Guam, Commonwealth der
+    Nördlichen Marianen, Puerto Rico, US Virgin Islands.
+
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="hasCertificateOfLossOfNationality"/>
+    c) Sofern die Frage b) angekreuzt wurde: Sind Sie im Besitz eines Dokumentes, welches die definitive Aufgabe der US-Staatsbürgerschaft beweist („Certificate of Loss of Nationality“) und verfügen Sie über einen nicht-amerikanischen Pass oder einen anderen behördlich ausgestellten Ausweis, der Ihre Staatsbürgerschaft eines anderen Staates als der USA bestätigt?
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="hasGreenCard"/>
+    d) Sind sie im Besitz einer gültigen amerikanischen „Green Card“?
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="hasUSImmigrationServiceCard"/>
+    e) Sind Sie im Besitz einer von der US-Amerikanischen Einwanderungs- und Einbürgerungs-behörde (US Citizenship and Immigration Services, USCIS) gültig ausgestellten Ausländer-Registrierungs-Karte für permanent niederlassungsberechtigte Personen?
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="hasUSResidenceForTax"/>
+    f) Haben Sie aus US-steuerlicher Sicht Wohnsitz in den USA? Sie gelten als in den USA steuerlich ansässig, wenn Sie den Substantial Presence Test erfüllen. Sie erfüllen diesen Test, wenn sie sich im laufenden Jahr während mindestens 183 Tagen oder, falls weniger aber bereits während mindestens 31 Tagen in den USA aufhalten, gemäss folgender Formel: (Anzahl Tage im laufenden Jahr x 1) + (Anzahl Tage im vorhergehenden Jahr x 1/3) + (Anzahl Tage im zweiten vorhergehenden Jahr x 1/6) ≥ 183 Tage
+
+  </label><br/>
+
+  <label>
+    <input type="checkbox" name="isUSResidentForOtherReasons"/>
+    g) Sind Sie aus einem anderen Grund in den USA unbeschränkt steuerpflichtig? Beispielsweise aufgrund bestimmter Visa (E, L, B-I, HI-B), welche möglicherweise eine unbeschränkte Steuerpflicht auslösen. Ebenfalls kann eine abgelaufene Green Card, welche nicht ordnungsgemäss retourniert wurde, zu einer unbeschränkten Steuerpflicht führen.
+
+  </label><br/>
+  <label>
+    Ist eine oder sind mehrere Fragen (mit Ausnahme von c) angekreuzt worden, wird die unterzeichnende Person gebeten, zusätzlich das Formular W-9 auszufüllen und zu unterzeichnen.
+
+  </label><br/>
+
+  <!-- Add a hidden input field to pass the customerId to the PDF generation form -->
+  <input type="hidden" id="customerId" name="customerId" th:value="${customerId}" />
+
+
+  <button type="submit">Generate PDF</button>
+</form>
+
+
+</body>
+</html>
