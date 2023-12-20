@@ -1,5 +1,6 @@
 package OnboardingPlatform.complianceForms.repository;
 
+// ----------------------------------------------------------------
 public interface WirtschaftlichBerechtigter {
 
     interface IdentifiedPerson {
