@@ -7,7 +7,7 @@
 <body>
 
 <h1>Feststellung der letztlich wirtschaftlich berechtigten Person (WB) des Rechtsträgers</h1>
-<form action="/pdf/generate" method="get">
+<form id="economicBeneficiaryForm" th:object="${EconomicBeneficiary}" class="row">
 
   <!-- Wirtschaftlich Berechtigter Questions -->
   <h2>1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers</h2>
@@ -98,12 +98,90 @@
   </label><br/>
 
   <!-- Add a hidden input field to pass the customerId to the PDF generation form -->
-  <input type="hidden" id="customerId" name="customerId" th:value="${customerId}" />
+  <input type="hidden" id="customerId" th:value="${customerId}" />
+  <input type="hidden" id="economicBeneficiaryId" th:value="${economicBeneficiaryId}" />
 
+  <button type="button" onclick="saveData()">Save Data</button>
+  <button type="button" onclick="generatePDF()">Generate PDF</button>
+  <button type="button" onclick="navigateNext()">Next Page</button>
 
-  <button type="submit">Generate PDF</button>
 </form>
+<script>
+ function saveData() {
+    console.log("Save Data Button clicked");
+
+    var form = document.getElementById("economicBeneficiaryForm");
+    var formData = new FormData(form);
+
+    // Convert checkbox values to boolean
+    var convertedData = {};
+    formData.forEach(function(value, key) {
+        if (value === "on") {
+            convertedData[key] = true;
+        } else {
+            convertedData[key] = value;
+        }
+    });
+
+    var customerId = document.getElementById("customerId").value; // Fetch customerId from the hidden input field
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/addBeneficiary?customerId=" + customerId); // Pass customerId as a parameter in the URL
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log("EconomicBeneficiary Data saved successfully");
+            } else {
+                console.error('Error:', xhr.status);
+                // Handle error cases here for saving EconomicBeneficiary data
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(convertedData)); // Sending the converted form data as JSON
+}
+
+function generatePDF() {
+    console.log("Generate PDF & Redirect Button clicked");
+
+    var form = document.getElementById("economicBeneficiaryForm");
+    var formData = new FormData(form);
+
+    // Retrieve customerId and economicBeneficiaryId from the hidden input fields
+    var customerIdInput = document.getElementById("customerId");
+    var economicBeneficiaryIdInput = document.getElementById("economicBeneficiaryId");
+
+    var customerId = parseInt(customerIdInput.value, 10);
+    var economicBeneficiaryId = parseInt(economicBeneficiaryIdInput.value, 10);
+
+    if (!isNaN(customerId) && !isNaN(economicBeneficiaryId)) {
+        var pdfGenerationUrl = `/pdf/generate/economicBeneficiary?customerId=${customerId}&economicBeneficiaryId=${economicBeneficiaryId}`;
+
+        var generatePDFXhr = new XMLHttpRequest();
+        generatePDFXhr.open("GET", pdfGenerationUrl);
+        generatePDFXhr.onreadystatechange = function() {
+            if (generatePDFXhr.readyState === XMLHttpRequest.DONE) {
+                if (generatePDFXhr.status === 200) {
+                    console.log("PDF generated successfully");
+                } else {
+                    console.error('Error generating PDF:', generatePDFXhr.status);
+                }
+            }
+        };
+        generatePDFXhr.send();
+    } else {
+        console.error('Invalid customerId or economicBeneficiaryId');
+    }
+}
 
 
+function navigateNext() {
+    console.log("Navigating to the next page");
+    window.location.href = "selfDisclosure.html";
+  }
+
+</script>
 </body>
 </html>

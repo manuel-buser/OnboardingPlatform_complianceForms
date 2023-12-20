@@ -1,25 +1,33 @@
 package OnboardingPlatform.complianceForms.service;
 
+import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import OnboardingPlatform.complianceForms.model.Customer;
-import OnboardingPlatform.complianceForms.model.IdentifiedPersonModel;
-import OnboardingPlatform.complianceForms.model.USPersonQualificationModel;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
-
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class PDFGeneratorService {
 
-    public void export(HttpServletResponse response, IdentifiedPersonModel identifiedPersonModel, Customer customer, USPersonQualificationModel usPersonQualificationModel) throws IOException {
+    public void exportToFile(String filePath, Customer customer, EconomicBeneficiary economicBeneficiary) throws IOException {
+
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-dd-MM_hh-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String fileName = "EconomicBeneficiary" + currentDateTime + ".pdf";
+        String completeFilePath = filePath + "/" + fileName;
+
         Document document = new Document(PageSize.A4);
         Font fontContent = FontFactory.getFont(FontFactory.HELVETICA);
         fontContent.setSize(12);
 
         try {
-            PdfWriter.getInstance(document, response.getOutputStream());
+            PdfWriter.getInstance(document, new FileOutputStream(completeFilePath));
             document.open();
 
             Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
@@ -51,13 +59,13 @@ public class PDFGeneratorService {
 
             boolean[] checkboxValuesSubtitle1 = new boolean[]{
                     // Wirtschaftlich berechtigter Questions
-                    identifiedPersonModel.isIdenticalToContractPartner(),
-                    identifiedPersonModel.isIdenticalToWealthContributor(),
-                    identifiedPersonModel.isMemberOfLeadershipBody(),
-                    identifiedPersonModel.isProtectorOrSimilar(),
-                    identifiedPersonModel.isBeneficiaryOrPotential(),
-                    identifiedPersonModel.holdsMoreThan25PercentShares(),
-                    identifiedPersonModel.exercisesControlOverManagement()
+                    economicBeneficiary.isIdenticalToContractPartner(),
+                    economicBeneficiary.isIdenticalToWealthContributor(),
+                    economicBeneficiary.isMemberOfLeadershipBody(),
+                    economicBeneficiary.isProtectorOrSimilar(),
+                    economicBeneficiary.isBeneficiaryOrPotential(),
+                    economicBeneficiary.isHoldsMoreThan25PercentShares(),
+                    economicBeneficiary.isExercisesControlOverManagement()
             };
 
 
@@ -81,13 +89,13 @@ public class PDFGeneratorService {
             boolean[] checkboxValuesSubtitle2 = new boolean[]{
 
                     // us person questions
-                    usPersonQualificationModel.isUSCitizen(),
-                    usPersonQualificationModel.isBornInUSTerritories(),
-                    usPersonQualificationModel.hasCertificateOfLossOfNationality(),
-                    usPersonQualificationModel.hasGreenCard(),
-                    usPersonQualificationModel.hasUSImmigrationServiceCard(),
-                    usPersonQualificationModel.hasUSResidenceForTax(),
-                    usPersonQualificationModel.isUSResidentForOtherReasons()
+                    economicBeneficiary.isUsCitizen(),
+                    economicBeneficiary.isBornInUSTerritories(),
+                    economicBeneficiary.isHasCertificateOfLossOfNationality(),
+                    economicBeneficiary.isHasGreenCard(),
+                    economicBeneficiary.isHasUSImmigrationServiceCard(),
+                    economicBeneficiary.isHasUSResidenceForTax(),
+                    economicBeneficiary.isUSResidentForOtherReasons()
             };
 
 
