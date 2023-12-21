@@ -2,6 +2,8 @@ package OnboardingPlatform.complianceForms.service;
 
 import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import OnboardingPlatform.complianceForms.model.Customer;
 import org.springframework.stereotype.Service;
@@ -110,18 +112,29 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 document.add(paragraph);
             }
 
-            // Customer details
-            Paragraph customerDetails = new Paragraph();
-            customerDetails.add("Name:\t" + customer.getLastName() + "\t Vorname:\t" + customer.getFirstName() + "\n");
-            customerDetails.add("Geburtsdatum:\t" + customer.getBirthDate() + "\t Nationalität:\t" + customer.getNationality() + "\n");
-            customerDetails.add("Wohnadresse:\t" + customer.getStreetName() + " " + customer.getStreetNumber() + "\t PLZ/Ort:\t" + customer.getPlzNumber() + "\n");
-            customerDetails.add("Wohnsitzstaat:\t" + customer.getCountry() + "\t Wohnsitz steuerlich:\t" + customer.getTaxCountry() + "\n");
-            customerDetails.add("Steueridentifikations-Nr./TIN:\t" + customer.getTaxIdentificationNumber());
+            // Subtitle 2
+            Paragraph subtitle2 = new Paragraph("2. Angaben zu Ihrer Person", fontSubTitle);
+            document.add(subtitle1);
+            PdfPTable customerDetailsTable = new PdfPTable(2); // 2 columns
+            customerDetailsTable.setWidthPercentage(100);
+            customerDetailsTable.setSpacingBefore(10f);
+            customerDetailsTable.setSpacingAfter(10f);
 
-            document.add(customerDetails);
+            // Adding cells to the table
+            addCell(customerDetailsTable, "Name:", customer.getLastName() + " " + customer.getFirstName());
+            addCell(customerDetailsTable, "Geburtsdatum:", customer.getBirthDate());
+            addCell(customerDetailsTable, "Nationalität:", customer.getNationality());
+            addCell(customerDetailsTable, "Wohnadresse:", customer.getStreetName() + " " + customer.getStreetNumber());
+            addCell(customerDetailsTable, "PLZ/Ort:", customer.getPlzNumber());
+            addCell(customerDetailsTable, "Wohnsitzstaat:", customer.getCountry());
+            addCell(customerDetailsTable, "Wohnsitz steuerlich:", customer.getTaxCountry());
+            addCell(customerDetailsTable, "Steueridentifikations-Nr./TIN:", customer.getTaxIdentificationNumber());
+
+            // Adding the table to the document
+            document.add(customerDetailsTable);
 
             // Subtitle 2
-            Paragraph subtitle2 = new Paragraph("2. Indizien bezüglich Qualifizierung als US-Person", fontSubTitle);
+            Paragraph subtitle3 = new Paragraph("3. Indizien bezüglich Qualifizierung als US-Person", fontSubTitle);
             document.add(subtitle2);
             Paragraph text1 = new Paragraph("Ist die oben, unter Ziff. 1 genannte Person ein US-Staatsbürger?" +
                     " Auf die genannte Person treffen folgende Merkmale zu (bitte Fragen durch Ankreuzen beantworten):");
@@ -145,6 +158,16 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 document.close();
             }
         }
+
+
     }
+
+    private void addCell(PdfPTable table, String label, String value) {
+        PdfPCell labelCell = new PdfPCell(new Phrase(label));
+        PdfPCell valueCell = new PdfPCell(new Phrase(value));
+        table.addCell(labelCell);
+        table.addCell(valueCell);
+    }
+
 }
 
