@@ -4,6 +4,7 @@ import OnboardingPlatform.complianceForms.model.Customer;
 import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
 import OnboardingPlatform.complianceForms.service.CustomerService;
 import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -12,6 +13,7 @@ public class Controller {
     private final CustomerService customerService;
     private final EconomicBeneficiaryService economicBeneficiaryService;
 
+    @Autowired
     public Controller(CustomerService customerService, EconomicBeneficiaryService economicBeneficiaryService) {
         this.customerService = customerService;
         this.economicBeneficiaryService = economicBeneficiaryService;

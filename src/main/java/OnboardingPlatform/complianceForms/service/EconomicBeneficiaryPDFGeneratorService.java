@@ -59,6 +59,7 @@ public class EconomicBeneficiaryPDFGeneratorService {
 
             boolean[] checkboxValuesSubtitle1 = new boolean[]{
                     // Wirtschaftlich berechtigter Questions
+                    // getter method for boolean: is instead of get
                     economicBeneficiary.isIdenticalToContractPartner(),
                     economicBeneficiary.isIdenticalToWealthContributor(),
                     economicBeneficiary.isMemberOfLeadershipBody(),
@@ -111,10 +112,10 @@ public class EconomicBeneficiaryPDFGeneratorService {
 
             // Customer details
             Paragraph customerDetails = new Paragraph();
-            customerDetails.add("Name:\t" + customer.getLastName() + "\tVorname:\t" + customer.getFirstName() + "\n");
-            customerDetails.add("Geburtsdatum:\t" + customer.getBirthDate() + "\tNationalität:\t" + customer.getNationality() + "\n");
-            customerDetails.add("Wohnadresse:\t" + customer.getStreetName() + " " + customer.getStreetNumber() + "\tPLZ/Ort:\t" + customer.getPlzNumber() + "\n");
-            customerDetails.add("Wohnsitzstaat:\t" + customer.getCountry() + "\tWohnsitz steuerlich:\t" + customer.getTaxCountry() + "\n");
+            customerDetails.add("Name:\t" + customer.getLastName() + "\t Vorname:\t" + customer.getFirstName() + "\n");
+            customerDetails.add("Geburtsdatum:\t" + customer.getBirthDate() + "\t Nationalität:\t" + customer.getNationality() + "\n");
+            customerDetails.add("Wohnadresse:\t" + customer.getStreetName() + " " + customer.getStreetNumber() + "\t PLZ/Ort:\t" + customer.getPlzNumber() + "\n");
+            customerDetails.add("Wohnsitzstaat:\t" + customer.getCountry() + "\t Wohnsitz steuerlich:\t" + customer.getTaxCountry() + "\n");
             customerDetails.add("Steueridentifikations-Nr./TIN:\t" + customer.getTaxIdentificationNumber());
 
             document.add(customerDetails);

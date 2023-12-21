@@ -146,9 +146,6 @@
 function generatePDF() {
     console.log("Generate PDF & Redirect Button clicked");
 
-    var form = document.getElementById("economicBeneficiaryForm");
-    var formData = new FormData(form);
-
     // Retrieve customerId and economicBeneficiaryId from the hidden input fields
     var customerIdInput = document.getElementById("customerId");
     var economicBeneficiaryIdInput = document.getElementById("economicBeneficiaryId");
