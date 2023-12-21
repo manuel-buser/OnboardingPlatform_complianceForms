@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class PDFGeneratorService {
+public class EconomicBeneficiaryPDFGeneratorService {
 
     public void exportToFile(String filePath, Customer customer, EconomicBeneficiary economicBeneficiary) throws IOException {
 

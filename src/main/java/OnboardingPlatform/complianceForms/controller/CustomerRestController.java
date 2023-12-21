@@ -2,7 +2,6 @@ package OnboardingPlatform.complianceForms.controller;
 
 import OnboardingPlatform.complianceForms.model.Customer;
 import OnboardingPlatform.complianceForms.service.CustomerService;
-import OnboardingPlatform.complianceForms.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +38,21 @@ public class CustomerRestController {
         return customerService.deleteCustomerById(id);
     }
 
+    /*
+    @GetMapping("/getCustomerById")
+    @ResponseBody
+    public ResponseEntity<Customer> getCustomerById(@RequestParam int customerId) {
+    // Customer customer = customerService.getCustomerById(customerId);
+    // if (customer != null) {
+    //     return ResponseEntity.ok(customer);
+    // } else {
+    //     return ResponseEntity.notFound().build();
+    // }
+    // Commented out the entire method to disable its functionality.
+    }
+*/
 
 }
+
+
+
