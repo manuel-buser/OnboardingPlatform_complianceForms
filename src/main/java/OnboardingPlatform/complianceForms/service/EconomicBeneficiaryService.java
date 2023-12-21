@@ -43,4 +43,7 @@ public class EconomicBeneficiaryService {
         return "Beneficiary deleted successfully " + id;
     }
 
+    public EconomicBeneficiary getBeneficiaryByCustomerId(int customerId) {
+        return beneficiaryRepository.findByCustomerCustomerId(customerId);
+    }
 }

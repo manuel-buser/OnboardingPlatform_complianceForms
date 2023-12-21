@@ -156,7 +156,12 @@ function generatePDF() {
     var customerId = parseInt(customerIdInput.value, 10);
     var economicBeneficiaryId = parseInt(economicBeneficiaryIdInput.value, 10);
 
-    if (!isNaN(customerId) && !isNaN(economicBeneficiaryId)) {
+    //print out customer id and economic beneficiary id to console
+    //console.log("customerId: " + customerId);
+    //console.log("economicBeneficiaryId: " + economicBeneficiaryId);
+
+    //if (!isNaN(customerId) && !isNaN(economicBeneficiaryId)) {
+    if (!isNaN(customerId)) {
         var pdfGenerationUrl = `/pdf/generate/economicBeneficiary?customerId=${customerId}&economicBeneficiaryId=${economicBeneficiaryId}`;
 
         var generatePDFXhr = new XMLHttpRequest();

@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // all of them included in constructor
 @NoArgsConstructor // no arguments
 @Entity
-@Table(name = "EconomicBeneficiary_TBL")
+@Table(name = "economic_beneficiary_tbl")
 public class EconomicBeneficiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int economicBeneficiaryId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -37,5 +37,6 @@ public class EconomicBeneficiary {
     private boolean hasUSImmigrationServiceCard;
     private boolean hasUSResidenceForTax;
     private boolean isUSResidentForOtherReasons;
+
 }
 

@@ -8,6 +8,7 @@ import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryPDFGenerato
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -46,12 +47,28 @@ public class EconomicBeneficiaryRestController {
     }
 
     @GetMapping("/pdf/generate/economicBeneficiary")
-    public void generatePDF(@RequestParam int customerId, @RequestParam int economicBeneficiaryId) throws IOException {
-        String filePath = "/C:/Intelij_PracticalProject/PracticalProject_BackupDirectory/complianceForms/src/main/resources/PDFs";
+    public void generatePDF(@RequestParam int customerId) throws IOException {
 
-        // Retrieve customer details from the database using the IDs
+        //get the classpath and point it to the PDFs folder
+        String classpath = System.getProperty("user.dir");
+        String filePath = classpath + "\\src\\main\\resources\\PDFs\\";
+
+        //if the path doesn't exist, create it
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+        }
+
+        //Retrieve the customer and beneficiary by using the customer ID
         Customer customer = customerService.getCustomerById(customerId);
-        EconomicBeneficiary economicBeneficiary = economicBeneficiaryService.getBeneficiaryById(economicBeneficiaryId);
+        EconomicBeneficiary economicBeneficiary = economicBeneficiaryService.getBeneficiaryByCustomerId(customerId);
+
+
+
+
+        //Print retrieved customer and economicBeneficiary to console
+        System.out.println(customer);
+        System.out.println(economicBeneficiary);
 
         // Use retrieved customer and economicBeneficiary in PDF generation
         this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary);
