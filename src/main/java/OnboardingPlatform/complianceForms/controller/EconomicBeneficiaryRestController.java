@@ -5,10 +5,12 @@ import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
 import OnboardingPlatform.complianceForms.service.CustomerService;
 import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryService;
 import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryPDFGeneratorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class EconomicBeneficiaryRestController {
@@ -18,6 +20,7 @@ public class EconomicBeneficiaryRestController {
 
     private final EconomicBeneficiaryService beneficiaryService;
 
+    @Autowired
     public EconomicBeneficiaryRestController(EconomicBeneficiaryPDFGeneratorService economicBeneficiaryPdfGeneratorService, CustomerService customerService,
                                              EconomicBeneficiaryService economicBeneficiaryService, EconomicBeneficiaryService beneficiaryService) {
         this.economicBeneficiaryPdfGeneratorService = economicBeneficiaryPdfGeneratorService;
@@ -46,8 +49,13 @@ public class EconomicBeneficiaryRestController {
     }
 
     @GetMapping("/pdf/generate/economicBeneficiary")
-    public void generatePDF(@RequestParam int customerId, @RequestParam int economicBeneficiaryId) throws IOException {
-        String filePath = "/C:/Intelij_PracticalProject/PracticalProject_BackupDirectory/complianceForms/src/main/resources/PDFs";
+    public void generatePDF(@RequestParam(name = "customerId") int customerId,
+                            @RequestParam(name = "economicBeneficiaryId") int economicBeneficiaryId) throws IOException {
+
+        // Dynamically construct the path to the PDFs directory based on the project's location
+        String projectPath = System.getProperty("user.dir");
+        Path pdfsPath = Paths.get(projectPath, "src", "main", "resources", "PDFs");
+        String filePath = pdfsPath.toString();
 
         // Retrieve customer details from the database using the IDs
         Customer customer = customerService.getCustomerById(customerId);
