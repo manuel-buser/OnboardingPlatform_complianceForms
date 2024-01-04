@@ -94,6 +94,6 @@ public class EconomicBeneficiaryRestController {
 
 
         // Use retrieved customer, economicBeneficiary, and signature in PDF generation
-        this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary, signatureBytes, currentPlace);
+        this.economicBeneficiaryPdfGeneratorService.exportToFileEco(filePath, customer, economicBeneficiary, signatureBytes, currentPlace);
     }
 }
