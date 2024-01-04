@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Map;
 
 @RestController
 public class EconomicBeneficiaryRestController {
@@ -46,8 +50,8 @@ public class EconomicBeneficiaryRestController {
         return beneficiaryService.deleteBeneficiaryById(id);
     }
 
-    @GetMapping("/pdf/generate/economicBeneficiary")
-    public void generatePDF(@RequestParam int customerId) throws IOException {
+    @PostMapping("/pdf/generate/economicBeneficiary")
+    public void generatePDF(@RequestBody Map<String, Object> formData) throws IOException {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");
@@ -59,18 +63,38 @@ public class EconomicBeneficiaryRestController {
             file.getParentFile().mkdirs();
         }
 
-        //Retrieve the customer and beneficiary by using the customer ID
+        // Retrieve data from the request body
+        int customerId = (int) formData.get("customerId");
+        String encodedSignature = (String) formData.get("signatureImage");
+
+        // Retrieve the customer and beneficiary by using the customer ID
         Customer customer = customerService.getCustomerById(customerId);
         EconomicBeneficiary economicBeneficiary = economicBeneficiaryService.getBeneficiaryByCustomerId(customerId);
 
+        // URL decode the encoded signature
+        String decodedSignature = java.net.URLDecoder.decode(encodedSignature, StandardCharsets.UTF_8);
+
+        // here the decoded signature is stored like this:
+        // data:image/png;base64,iVBORw0KGgoAAAANSUhE....
+        // and we have to take away everything in front of the first , (comma)
+        // otherwise we get an illegal base64 char error
+
+        int indexOfComma = decodedSignature.indexOf(",");
+
+        String cleanedSignature;
+        if(indexOfComma != -1) {
+            cleanedSignature = decodedSignature.substring(indexOfComma + 1);
+        } else {
+            cleanedSignature = decodedSignature;
+        }
+        System.out.println("Cleaned Signature: " + cleanedSignature);
 
 
+        // Decode Base64 data
+        byte[] signatureBytes = Base64.getDecoder().decode(cleanedSignature);
 
-        //Print retrieved customer and economicBeneficiary to console
-        System.out.println(customer);
-        System.out.println(economicBeneficiary);
 
-        // Use retrieved customer and economicBeneficiary in PDF generation
-        this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary);
+        // Use retrieved customer, economicBeneficiary, and signature in PDF generation
+        this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary, signatureBytes);
     }
 }

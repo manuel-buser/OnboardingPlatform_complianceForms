@@ -11,12 +11,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
+import com.lowagie.text.Image;
 
 @Service
 public class EconomicBeneficiaryPDFGeneratorService {
 
-    public void exportToFile(String filePath, Customer customer, EconomicBeneficiary economicBeneficiary) throws IOException {
+    public void exportToFile(String filePath, Customer customer, EconomicBeneficiary economicBeneficiary, byte[] signatureBytes) throws IOException {
 
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-dd-MM_hh-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -114,7 +116,7 @@ public class EconomicBeneficiaryPDFGeneratorService {
 
             // Subtitle 2
             Paragraph subtitle2 = new Paragraph("2. Angaben zu Ihrer Person", fontSubTitle);
-            document.add(subtitle1);
+            document.add(subtitle2);
             PdfPTable customerDetailsTable = new PdfPTable(2); // 2 columns
             customerDetailsTable.setWidthPercentage(100);
             customerDetailsTable.setSpacingBefore(10f);
@@ -135,7 +137,7 @@ public class EconomicBeneficiaryPDFGeneratorService {
 
             // Subtitle 2
             Paragraph subtitle3 = new Paragraph("3. Indizien bezüglich Qualifizierung als US-Person", fontSubTitle);
-            document.add(subtitle2);
+            document.add(subtitle3);
             Paragraph text1 = new Paragraph("Ist die oben, unter Ziff. 1 genannte Person ein US-Staatsbürger?" +
                     " Auf die genannte Person treffen folgende Merkmale zu (bitte Fragen durch Ankreuzen beantworten):");
             document.add(text1);
@@ -148,6 +150,11 @@ public class EconomicBeneficiaryPDFGeneratorService {
             Paragraph text2 = new Paragraph("Ist eine oder sind mehrere Fragen (mit Ausnahme von c) angekreuzt worden, wird die " +
                     "unterzeichnende Person gebeten, zusätzlich das Formular W-9 auszufüllen und zu unterzeichnen. ");
             document.add(text2);
+
+            // Generate the signature image from the decoded byte array
+            Image signature = Image.getInstance(signatureBytes);
+            signature.scaleToFit(150, 50); // Adjust the size as needed
+            document.add(signature); // Add the signature image to the PDF document
 
 
 
