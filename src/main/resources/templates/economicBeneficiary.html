@@ -149,6 +149,8 @@
 
     <!-- Signature Section -->
     <div>
+      <label for="currentPlace">Aktueller Ort:</label>
+      <input type="text" id="currentPlace" name="currentPlace" placeholder="Ort eingeben" />
       <p>Unterschreiben Sie bitte im nachfolgenden Feld.</p>
       <p><b>Unterschrift:</b></p>
       <canvas height="100" width="300" class="signature-pad"></canvas>
@@ -257,12 +259,14 @@ function clearCanvas() {
 function generatePDF() {
     console.log("Generate PDF & Redirect Button clicked");
 
-    // Retrieve customerId and economicBeneficiaryId from the hidden input fields
+    // Retrieve customerId, economicBeneficiaryId, and currentPlace from the form
     var customerIdInput = document.getElementById("customerId");
     var economicBeneficiaryIdInput = document.getElementById("economicBeneficiaryId");
+    var currentPlaceInput = document.getElementById("currentPlace");
 
     var customerId = parseInt(customerIdInput.value, 10);
     var economicBeneficiaryId = parseInt(economicBeneficiaryIdInput.value, 10);
+    var currentPlace = currentPlaceInput.value; // Retrieve the current place from the form
 
     var signatureDataURL = canvas.toDataURL(); // Get the signature image data
 
@@ -274,7 +278,8 @@ function generatePDF() {
     var data = {
         customerId: customerId,
         economicBeneficiaryId: economicBeneficiaryId,
-        signatureImage: encodedSignature // Include the encoded signature image data
+        signatureImage: encodedSignature, // Include the encoded signature image data
+        currentPlace: currentPlace // Include the current place
     };
 
     // Make an AJAX request to send the data to the server

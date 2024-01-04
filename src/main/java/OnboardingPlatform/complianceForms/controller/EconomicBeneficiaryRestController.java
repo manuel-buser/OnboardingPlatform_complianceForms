@@ -66,6 +66,7 @@ public class EconomicBeneficiaryRestController {
         // Retrieve data from the request body
         int customerId = (int) formData.get("customerId");
         String encodedSignature = (String) formData.get("signatureImage");
+        String currentPlace = (String) formData.get("currentPlace");
 
         // Retrieve the customer and beneficiary by using the customer ID
         Customer customer = customerService.getCustomerById(customerId);
@@ -87,14 +88,12 @@ public class EconomicBeneficiaryRestController {
         } else {
             cleanedSignature = decodedSignature;
         }
-        System.out.println("Cleaned Signature: " + cleanedSignature);
-
 
         // Decode Base64 data
         byte[] signatureBytes = Base64.getDecoder().decode(cleanedSignature);
 
 
         // Use retrieved customer, economicBeneficiary, and signature in PDF generation
-        this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary, signatureBytes);
+        this.economicBeneficiaryPdfGeneratorService.exportToFile(filePath, customer, economicBeneficiary, signatureBytes, currentPlace);
     }
 }
