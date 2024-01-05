@@ -6,55 +6,54 @@
   <title>Identifying Economically Beneficial Person</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-     :root {
-      /* color for the canvas element */
-      --primary-color: #999;
-    }
+  :root {
+    --primary-color: #999;
+  }
 
-     font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.4;
-      padding: 0; /* Reset default body padding */
-      margin: 0; /* Reset default body margin */
-      background-color: #fff; /* Set a light grey background for the whole body */
-    }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+  }
 
-    .inside {
-      background-color: #2a2a2a; /* Set a white background for the inside content */
-      padding: 4rem 6rem; /* Add padding inside the .inside container */
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    }
+  .inside {
+    /* Removed background-color property to inherit body's background */
+    padding: 4rem 6rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
-    /* this is the actual form - tagged in the html  */
-    .signature-pad-form {
-      max-width: 300px;
-      margin: 0 auto;
-    }
+  .signature-pad-form {
+    max-width: 300px;
+    margin: 0 auto;
+  }
 
-    .signature-pad {
-      /* this will show the cursor */
-      border: 2px solid var(--primary-color);
-      border-radius: 4px;
-    }
+  .signature-pad {
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+  }
 
-    .clear-button {
-      color: var(--primary-color);
-    }
+  .clear-button {
+    color: var(--primary-color);
+  }
 
-    @media (pointer: coarse) {
-      body {
-        overflow: hidden; /* Needed to prevent the vertical scroll */
-      }
+  @media (pointer: coarse) {
+    body {
+      overflow: hidden;
     }
-  /* Style the checkboxes and their labels */
+  }
+
   input[type="checkbox"] {
-    margin-right: 15px; /* Adjust the margin as needed */
+    margin-right: 15px;
   }
 
   label {
-    display: block; /* Display labels as blocks */
-    margin-bottom: 10px; /* Adjust the margin between each label as needed */
+    display: block;
+    margin-bottom: 10px;
   }
-  </style>
+</style>
+
 </head>
 
 <body>
@@ -273,7 +272,7 @@ function generatePDF() {
 
 function navigateNext() {
     console.log("Navigating to the next page");
-    window.location.href = "/selfDisclosure.html";
+    window.location.href = "/selfDisclosure";
 
   }
 
