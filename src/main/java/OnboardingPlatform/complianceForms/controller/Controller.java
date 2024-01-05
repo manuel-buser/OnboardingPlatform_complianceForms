@@ -2,8 +2,10 @@ package OnboardingPlatform.complianceForms.controller;
 
 import OnboardingPlatform.complianceForms.model.Customer;
 import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
+import OnboardingPlatform.complianceForms.model.SelfDisclosure;
 import OnboardingPlatform.complianceForms.service.CustomerService;
 import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryService;
+import OnboardingPlatform.complianceForms.service.SelfDisclosureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Controller {
     private final CustomerService customerService;
     private final EconomicBeneficiaryService economicBeneficiaryService;
+    private final SelfDisclosureService selfDisclosureService;
 
     @Autowired
-    public Controller(CustomerService customerService, EconomicBeneficiaryService economicBeneficiaryService) {
+    public Controller(CustomerService customerService, EconomicBeneficiaryService economicBeneficiaryService, SelfDisclosureService selfDisclosureService) {
         this.customerService = customerService;
         this.economicBeneficiaryService = economicBeneficiaryService;
+        this.selfDisclosureService = selfDisclosureService;
     }
 
     @GetMapping("/")
@@ -44,7 +48,19 @@ public class Controller {
     }
 
     @GetMapping("/selfDisclosure")
-    public String getSelfDisclosureHtml() {
+    public String getSelfDisclosureHtml(Model model) {
+        Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();
+        SelfDisclosure lastCreatedSelfDisclosure = selfDisclosureService.getLastCreatedSelfDisclosure();
+
+        if (lastCreatedCustomer != null) {
+            int customerId = lastCreatedCustomer.getCustomerId();
+            model.addAttribute("customerId", customerId);
+        }
+        if (lastCreatedSelfDisclosure != null) {
+            int beneficiaryId = lastCreatedSelfDisclosure.getSelfDisclosureId();
+            model.addAttribute("economicBeneficiaryId", beneficiaryId);
+        }
+
         return "selfDisclosure";
     }
 

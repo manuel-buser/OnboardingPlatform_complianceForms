@@ -29,14 +29,7 @@ public class EconomicBeneficiary {
     private boolean holdsMoreThan25PercentShares;
     private boolean exercisesControlOverManagement;
 
-    // US Person Qualification fields
-    private boolean usCitizen;
-    private boolean bornInUSTerritories;
-    private boolean hasCertificateOfLossOfNationality;
-    private boolean hasGreenCard;
-    private boolean hasUSImmigrationServiceCard;
-    private boolean hasUSResidenceForTax;
-    private boolean isUSResidentForOtherReasons;
+
 
 }
 

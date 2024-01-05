@@ -1,22 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
   <meta charset="UTF-8">
   <title>Identifying Economically Beneficial Person</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+  :root {
+    --primary-color: #999;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+  }
+
+  .inside {
+    /* Removed background-color property to inherit body's background */
+    padding: 4rem 6rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .signature-pad-form {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .signature-pad {
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+  }
+
+  .clear-button {
+    color: var(--primary-color);
+  }
+
+  @media (pointer: coarse) {
+    body {
+      overflow: hidden;
+    }
+  }
+
+  input[type="checkbox"] {
+    margin-right: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+</style>
+
 </head>
+
 <body>
 
+<div class="inside">
 <div class="container">
   <h1>Feststellung der letztlich wirtschaftlich berechtigten Person (WB) des Rechtsträgers</h1>
   <form id="economicBeneficiaryForm" th:object="${EconomicBeneficiary}" class="row">
 
-
   <!-- Wirtschaftlich Berechtigter Questions -->
-  <h2>1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers</h2>
-  <label>
-    <input type="checkbox" name="identicalToContractPartner"/>
-    Die nachstehende Person ist mit dem Vertragspartner identisch
+  <h3>1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers</h3>
+
+    <label>
+      <input type="checkbox" name="identicalToContractPartner"/>
+      Die nachstehende Person ist mit dem Vertragspartner identisch
   </label><br/>
 
   <label>
@@ -49,67 +101,92 @@
     Die nachstehende Person übt auf andere Weise die Kontrolle über die Geschäftsführung oder letztlich direkt/indirekt die Kontrolle über das Vermögen des obigen Rechtsträgers aus
   </label><br/>
 
-  <!-- US - Person Questions -->
-  <h2>2. Indizien bezüglich Qualifizierung als US-Person</h2>
-  <label>
-    Ist die oben, unter Ziff. 1 genannte Person ein US-Staatsbürger? Auf die genannte Person treffen folgende Merkmale zu (bitte Fragen durch Ankreuzen beantworten):
-  </label><br/>
 
-  <label>
-    <input type="checkbox" name="usCitizen"/>
-    a) Sind Sie im Besitz der US-Staatsbürgerschaft? Sie müssen ebenfalls mit „Ja“ antworten, falls Sie die US-Staatsbürgerschaft als eine
-    von mehreren Staatsbürgerschaften besitzen.
+      <h3>3. Rechtliche Hinweise</h3>
+      <p>
+        Eine vorsätzlich oder fahrlässig falsch erteilte Erklärung ist strafbar. Selbiges gilt, wenn Änderungen der Gegebenheiten nicht mitgeteilt werden oder über Änderungen der Gegebenheiten falsche Angaben gemacht werden.
+      </p>
+      <p>
+        Ich, der unterzeichnende Vertragspartner bestätige die Richtigkeit und Vollständigkeit sämtlicher von mir gemachten Angaben. Ich verpflichte mich, allfällige Änderungen unaufgefordert und unverzüglich CorPa Treuhand AG schriftlich mitzuteilen.
+      </p>
+      <p>
+        Ich nehme darüber hinaus zur Kenntnis und bin damit einverstanden, dass im Falle einer Konto-/Depoteröffnung bei einer Bank der Inhalt dieser Erklärung der Bank gegenüber bekannt zu geben ist.
+      </p>
 
-  </label><br/>
+    <!-- Signature Section -->
+    <div>
+      <label for="currentPlace">Aktueller Ort:</label>
+      <input type="text" id="currentPlace" name="currentPlace" placeholder="Ort eingeben" />
+      <p>Unterschreiben Sie bitte im nachfolgenden Feld.</p>
+      <p><b>Unterschrift:</b></p>
+      <canvas height="100" width="300" class="signature-pad"></canvas>
+      <p>
+        <a href="#" class="clear-button" onclick="clearCanvas()">Clear</a>
+      </p>
 
-  <label>
-    <input type="checkbox" name="bornInUSTerritories"/>
-    b) Sind Sie in den USA (oder in einem der US Territorien) geboren? US Territorien: Amerikanisch-Samoa und Swains Island, Guam, Commonwealth der
-    Nördlichen Marianen, Puerto Rico, US Virgin Islands.
-
-  </label><br/>
-
-  <label>
-    <input type="checkbox" name="hasCertificateOfLossOfNationality"/>
-    c) Sofern die Frage b) angekreuzt wurde: Sind Sie im Besitz eines Dokumentes, welches die definitive Aufgabe der US-Staatsbürgerschaft beweist („Certificate of Loss of Nationality“) und verfügen Sie über einen nicht-amerikanischen Pass oder einen anderen behördlich ausgestellten Ausweis, der Ihre Staatsbürgerschaft eines anderen Staates als der USA bestätigt?
-  </label><br/>
-
-  <label>
-    <input type="checkbox" name="hasGreenCard"/>
-    d) Sind sie im Besitz einer gültigen amerikanischen „Green Card“?
-  </label><br/>
-
-  <label>
-    <input type="checkbox" name="hasUSImmigrationServiceCard"/>
-    e) Sind Sie im Besitz einer von der US-Amerikanischen Einwanderungs- und Einbürgerungs-behörde (US Citizenship and Immigration Services, USCIS) gültig ausgestellten Ausländer-Registrierungs-Karte für permanent niederlassungsberechtigte Personen?
-  </label><br/>
-
-  <label>
-    <input type="checkbox" name="hasUSResidenceForTax"/>
-    f) Haben Sie aus US-steuerlicher Sicht Wohnsitz in den USA? Sie gelten als in den USA steuerlich ansässig, wenn Sie den Substantial Presence Test erfüllen. Sie erfüllen diesen Test, wenn sie sich im laufenden Jahr während mindestens 183 Tagen oder, falls weniger aber bereits während mindestens 31 Tagen in den USA aufhalten, gemäss folgender Formel: (Anzahl Tage im laufenden Jahr x 1) + (Anzahl Tage im vorhergehenden Jahr x 1/3) + (Anzahl Tage im zweiten vorhergehenden Jahr x 1/6) ≥ 183 Tage
-
-  </label><br/>
-
-  <label>
-    <input type="checkbox" name="isUSResidentForOtherReasons"/>
-    g) Sind Sie aus einem anderen Grund in den USA unbeschränkt steuerpflichtig? Beispielsweise aufgrund bestimmter Visa (E, L, B-I, HI-B), welche möglicherweise eine unbeschränkte Steuerpflicht auslösen. Ebenfalls kann eine abgelaufene Green Card, welche nicht ordnungsgemäss retourniert wurde, zu einer unbeschränkten Steuerpflicht führen.
-
-  </label><br/>
-  <label>
-    Ist eine oder sind mehrere Fragen (mit Ausnahme von c) angekreuzt worden, wird die unterzeichnende Person gebeten, zusätzlich das Formular W-9 auszufüllen und zu unterzeichnen.
-
-  </label><br/>
-
+      <!-- Buttons -->
+      <div>
+        <button type="button" onclick="saveData()">Save Data</button>
+        <br> <!-- Line break to ensure buttons are vertically spaced -->
+        <button type="button" onclick="generatePDF()">Generate PDF</button>
+        <br> <!-- Line break to ensure buttons are vertically spaced -->
+        <button type="button" onclick="navigateNext()">Next Page</button>
+      </div>
+    </div>
 
     <!-- Add a hidden input field to pass the customerId to the PDF generation form -->
-  <input type="hidden" id="customerId" th:value="${customerId}" />
-  <input type="hidden" id="economicBeneficiaryId" th:value="${economicBeneficiaryId}" />
+    <div>
+      <input type="hidden" id="customerId" th:value="${customerId}" />
+      <input type="hidden" id="economicBeneficiaryId" th:value="${economicBeneficiaryId}" />
+    </div>
 
-  <button type="button" onclick="saveData()">Save Data</button>
-  <button type="button" onclick="generatePDF()">Generate PDF</button>
-  <button type="button" onclick="navigateNext()">Next Page</button>
 
-</form>
+  </form>
+</div>
+</div>
+
+
+<!-- link to the javascript file for the logic -->
+<script>
+
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function draw(e) {
+  if (!isDrawing) return;
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#000'; // Set the stroke style to black
+
+  ctx.beginPath();
+  // Start from
+  ctx.moveTo(lastX, lastY);
+  // Go to
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+}
+
+canvas.addEventListener('mousedown', (e) => {
+  isDrawing = true;
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+});
+
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseout', () => isDrawing = false);
+
+function clearCanvas() {
+    console.log("Clear Button clicked");
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the entire canvas
+  }
+
+
+</script>
+
 <script>
  function saveData() {
     console.log("Save Data Button clicked");
@@ -150,42 +227,52 @@
 function generatePDF() {
     console.log("Generate PDF & Redirect Button clicked");
 
-    // Retrieve customerId and economicBeneficiaryId from the hidden input fields
+    // Retrieve customerId, economicBeneficiaryId, and currentPlace from the form
     var customerIdInput = document.getElementById("customerId");
     var economicBeneficiaryIdInput = document.getElementById("economicBeneficiaryId");
+    var currentPlaceInput = document.getElementById("currentPlace");
 
     var customerId = parseInt(customerIdInput.value, 10);
     var economicBeneficiaryId = parseInt(economicBeneficiaryIdInput.value, 10);
+    var currentPlace = currentPlaceInput.value; // Retrieve the current place from the form
 
-    //print out customer id and economic beneficiary id to console
-    //console.log("customerId: " + customerId);
-    //console.log("economicBeneficiaryId: " + economicBeneficiaryId);
+    var signatureDataURL = canvas.toDataURL(); // Get the signature image data
 
-    //if (!isNaN(customerId) && !isNaN(economicBeneficiaryId)) {
-    if (!isNaN(customerId)) {
-        var pdfGenerationUrl = `/pdf/generate/economicBeneficiary?customerId=${customerId}&economicBeneficiaryId=${economicBeneficiaryId}`;
+    console.log("Signature Data URL:", signatureDataURL); // Log the signature data URL
 
-        var generatePDFXhr = new XMLHttpRequest();
-        generatePDFXhr.open("GET", pdfGenerationUrl);
-        generatePDFXhr.onreadystatechange = function() {
-            if (generatePDFXhr.readyState === XMLHttpRequest.DONE) {
-                if (generatePDFXhr.status === 200) {
-                    console.log("PDF generated successfully");
-                } else {
-                    console.error('Error generating PDF:', generatePDFXhr.status);
-                }
-            }
-        };
-        generatePDFXhr.send();
-    } else {
-        console.error('Invalid customerId or economicBeneficiaryId');
-    }
+    // Encode the signature data using encodeURIComponent
+    var encodedSignature = encodeURIComponent(signatureDataURL);
+
+    var data = {
+        customerId: customerId,
+        economicBeneficiaryId: economicBeneficiaryId,
+        signatureImage: encodedSignature, // Include the encoded signature image data
+        currentPlace: currentPlace // Include the current place
+    };
+
+    // Make an AJAX request to send the data to the server
+    fetch('/pdf/generate/economicBeneficiary', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("PDF generated successfully");
+        } else {
+            console.error('Error generating PDF:', response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Error generating PDF:', error);
+    });
 }
-
 
 function navigateNext() {
     console.log("Navigating to the next page");
-    window.location.href = "/selfDisclosure.html";
+    window.location.href = "/selfDisclosure";
 
   }
 
