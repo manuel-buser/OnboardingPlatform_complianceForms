@@ -7,36 +7,36 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h1>Please enter your Personal Details</h1>
+    <h1>Bitte geben Sie nachfolgend Ihre Personalien an</h1>
     <form id="customerForm" th:object="${customer}" class="row">
         <!-- firstName Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="firstName">First Name:</label>
+            <label for="firstName">Vorname:</label>
             <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
         </div>
         <!-- lastName Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="lastName">Last Name:</label>
+            <label for="lastName">Nachname:</label>
             <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
         </div>
         <!-- birthDate Attribute Field -->
         <div class="form-group col-md-6">
-        <label for="birthDate">Birth Date:</label>
+        <label for="birthDate">Geburtstag:</label>
         <input type="text" class="form-control" id="birthDate" th:field="*{birthDate}">
         </div>
         <!-- nationality Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="nationality">Nationality:</label>
+            <label for="nationality">Nationalität:</label>
             <input type="text" class="form-control" id="nationality" th:field="*{nationality}">
         </div>
         <!-- streetName Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="streetName">Street Name:</label>
+            <label for="streetName">Strasse:</label>
             <input type="text" class="form-control" id="streetName" th:field="*{streetName}">
         </div>
         <!-- streetNumber Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="streetNumber">Street Number:</label>
+            <label for="streetNumber">Nummer:</label>
             <input type="text" class="form-control" id="streetNumber" th:field="*{streetNumber}">
         </div>
         <!-- plzNumber Attribute Field -->
@@ -46,27 +46,27 @@
         </div>
         <!-- city Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="city">City:</label>
+            <label for="city">Stadt:</label>
             <input type="text" class="form-control" id="city" th:field="*{city}">
         </div>
         <!-- country Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="country">Country:</label>
+            <label for="country">Wohnsitzstaat:</label>
             <input type="text" class="form-control" id="country" th:field="*{country}">
         </div>
         <!-- taxCountry Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="taxCountry">Tax Country:</label>
+            <label for="taxCountry">Wohnsitzland steuerlich:</label>
             <input type="text" class="form-control" id="taxCountry" th:field="*{taxCountry}">
         </div>
         <!-- taxIdentificationNumber Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="taxIdentificationNumber">Tax Identification Number:</label>
+            <label for="taxIdentificationNumber">Steueridentifikations-Nr./TIN:</label>
             <input type="text" class="form-control" id="taxIdentificationNumber" th:field="*{taxIdentificationNumber}">
         </div>
         <!-- phoneNumber Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="phoneNumber">Phone Number:</label>
+            <label for="phoneNumber">Mobile Nummer:</label>
             <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}">
         </div>
         <!-- emailAddress Attribute Field -->
@@ -76,7 +76,7 @@
         </div>
         <!-- jobTitle Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="jobTitle">Job Tytle:</label>
+            <label for="jobTitle">Berufsbezeichnung:</label>
             <input type="text" class="form-control" id="jobTitle" th:field="*{jobTitle}">
         </div>
         <!-- hidden input field to store the ID for the PDF Generation later on -->

@@ -37,7 +37,7 @@ public class SelfDisclosurePDFGeneratorService {
 
         Document document = new Document(PageSize.A4);
         Font fontContent = FontFactory.getFont(FontFactory.HELVETICA);
-        fontContent.setSize(12);
+        fontContent.setSize(10);
 
         // Create an instance of LogoReader
         LogoReader logoReader = new LogoReader();
@@ -49,10 +49,10 @@ public class SelfDisclosurePDFGeneratorService {
             document.open();
 
             Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-            fontTitle.setSize(18);
+            fontTitle.setSize(14);
 
             Font fontSubTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-            fontSubTitle.setSize(12);
+            fontSubTitle.setSize(11);
 
             // Main Title
             // Convert the BufferedImage to iText's Image format
@@ -67,7 +67,7 @@ public class SelfDisclosurePDFGeneratorService {
             headerTable1.setWidths(new int[]{3, 1}); // Adjust the widths for left and right alignment
 
             // Add the title to the header
-            Paragraph titleParagraph = new Paragraph("Erklärung des Vertragspartners zur Feststellung der Identität der wirtschaftlich berechtigten Person(en)", fontTitle);
+            Paragraph titleParagraph = new Paragraph("Selbstauskunft", fontTitle);
             PdfPCell titleCell = new PdfPCell(titleParagraph);
             titleCell.setBorder(Rectangle.NO_BORDER);
             titleCell.setHorizontalAlignment(Element.ALIGN_LEFT); // Align title to the left
@@ -121,14 +121,17 @@ public class SelfDisclosurePDFGeneratorService {
             customerDetailsTable.setSpacingAfter(10f);
 
             // Adding cells to the table
-            addCell(customerDetailsTable, "Name:", customer.getLastName() + " " + customer.getFirstName());
+            addCell(customerDetailsTable, "Nachname, Vorname:", customer.getLastName() + " " + customer.getFirstName());
             addCell(customerDetailsTable, "Geburtsdatum:", customer.getBirthDate());
             addCell(customerDetailsTable, "Nationalität:", customer.getNationality());
             addCell(customerDetailsTable, "Wohnadresse:", customer.getStreetName() + " " + customer.getStreetNumber());
             addCell(customerDetailsTable, "PLZ/Ort:", customer.getPlzNumber());
             addCell(customerDetailsTable, "Wohnsitzstaat:", customer.getCountry());
-            addCell(customerDetailsTable, "Wohnsitz steuerlich:", customer.getTaxCountry());
+            addCell(customerDetailsTable, "Land der unbeschränkten Steuerpflicht:", customer.getTaxCountry());
             addCell(customerDetailsTable, "Steueridentifikations-Nr./TIN:", customer.getTaxIdentificationNumber());
+            addCell(customerDetailsTable, "Telefonnummer:", customer.getPhoneNumber());
+            addCell(customerDetailsTable, "E-Mail Adresse:", customer.getEmailAddress());
+            addCell(customerDetailsTable, "Beruf:", customer.getJobTitle());
 
             // Adding the table to the document
             document.add(customerDetailsTable);
@@ -136,74 +139,132 @@ public class SelfDisclosurePDFGeneratorService {
             // Subtitle 2
             Paragraph subtitle2 = new Paragraph("2. Indizien bezüglich Qualifizierung als US-Person", fontSubTitle);
             document.add(subtitle2);
-            Paragraph text1 = new Paragraph("Ist die oben, unter Ziff. 1 genannte Person ein US-Staatsbürger?" +
-                    " Auf die genannte Person treffen folgende Merkmale zu (bitte Fragen durch Ankreuzen beantworten):");
-            document.add(text1);
+
+            // Table for checkbox values in Subtitle 2
+            PdfPTable checkboxTableSubtitle2 = new PdfPTable(2);
+            checkboxTableSubtitle2.setWidthPercentage(100);
+            checkboxTableSubtitle2.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+            // Set widths for the columns
+            float[] columnWidthsSubtitle2 = {0.2f, 3.5f}; // Adjusted the left column width to be smaller
+            checkboxTableSubtitle2.setWidths(columnWidthsSubtitle2);
+
             for (int i = 0; i < checkboxLabelsSubtitle2.length; i++) {
                 Chunk checkbox = checkboxValuesSubtitle2[i] ? new Chunk("[X] ", fontContent) : new Chunk("[ ] ", fontContent);
-                Paragraph paragraph = new Paragraph(checkbox);
-                paragraph.add(new Phrase(checkboxLabelsSubtitle2[i], fontContent));
-                document.add(paragraph);
+                PdfPCell checkboxCell = new PdfPCell(new Phrase(checkbox));
+                checkboxCell.setBorder(Rectangle.NO_BORDER);
+                checkboxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                checkboxCell.setHorizontalAlignment(Element.ALIGN_LEFT); // Align checkbox value left-centred
+
+                PdfPCell labelCell = new PdfPCell(new Phrase(checkboxLabelsSubtitle2[i], FontFactory.getFont(FontFactory.HELVETICA, 12)));
+                labelCell.setBorder(Rectangle.NO_BORDER);
+                labelCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                checkboxTableSubtitle2.addCell(checkboxCell);
+                checkboxTableSubtitle2.addCell(labelCell);
             }
-            Paragraph text2 = new Paragraph("Ist eine oder sind mehrere Fragen (mit Ausnahme von c) angekreuzt worden, wird die " +
+
+            document.add(checkboxTableSubtitle2);
+
+
+            Paragraph text2 = new Paragraph("\nIst eine oder sind mehrere Fragen (mit Ausnahme von c) angekreuzt worden, wird die " +
                     "unterzeichnende Person gebeten, zusätzlich das Formular W-9 auszufüllen und zu unterzeichnen. ");
             document.add(text2);
 
 
-            Paragraph subtitle3 = new Paragraph("3. Steuerliche Ansässigkeit in einem EU-Mitgliedstaat", fontSubTitle);
+            // Subtitle 3
+            Paragraph subtitle3 = new Paragraph("\n3. Steuerliche Ansässigkeit in einem EU-Mitgliedstaat", fontSubTitle);
             document.add(subtitle3);
 
-            // EU Tax Residency
-            Chunk euTaxResidencyChunk = selfDisclosure.isEuTaxResidency() ? new Chunk("Ja", fontContent) : new Chunk("Nein", fontContent);
-            Paragraph euTaxResidencyParagraph = new Paragraph("Haben Sie eine steuerliche Ansässigkeit in einem EU-Mitgliedstaat? ");
-            euTaxResidencyParagraph.add(euTaxResidencyChunk);
-            document.add(euTaxResidencyParagraph);
+            // Table for checkbox values in Subtitle 3
+            PdfPTable checkboxTableSubtitle3 = new PdfPTable(2);
+            checkboxTableSubtitle3.setWidthPercentage(100);
+            checkboxTableSubtitle3.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 
-            if (selfDisclosure.isEuTaxResidency()) {
-                Paragraph euTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, bestätigen Sie hiermit, dass Sie über die EU-Steuer- transparenzrichtlinie 2018/822/EU DAC6 unterrichtet wurden und Ihnen das Kunden-Informations- schreiben EU-Steuertransparenzrichtlinie DAC6 der CorPa Treuhand AG ausgehändigt wurde.");
-                document.add(euTaxResidencyConfirmation);
-            }
+            // Set widths for the columns
+            float[] columnWidthsSubtitle3 = {0.2f, 3.5f}; // Adjusted the left column width to be smaller
+            checkboxTableSubtitle3.setWidths(columnWidthsSubtitle3);
 
-            Paragraph subtitle4 = new Paragraph("4. Steuerliche Ansässigkeit in UK", fontSubTitle);
+            // EU Tax Residency with checkboxes
+            boolean euTaxResidencyValue = selfDisclosure.isEuTaxResidency();
+            String euTaxResidencyLabel = "Haben Sie eine steuerliche Ansässigkeit in einem EU-Mitgliedstaat?\n ";
+            addCheckboxRow(checkboxTableSubtitle3, euTaxResidencyLabel, euTaxResidencyValue);
+
+            Paragraph euTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, " +
+                    "bestätigen Sie hiermit, dass Sie über die EU-Steuer- transparenzrichtlinie 2018/822/EU DAC6 unterrichtet" +
+                    " wurden und Ihnen das Kunden-Informations- schreiben EU-Steuertransparenzrichtlinie DAC6 der CorPa " +
+                    "Treuhand AG ausgehändigt wurde.\n");
+
+            document.add(checkboxTableSubtitle3);
+            document.add(euTaxResidencyConfirmation);
+
+            // Subtitle 4
+            Paragraph subtitle4 = new Paragraph("\n4. Steuerliche Ansässigkeit in UK\n", fontSubTitle);
             document.add(subtitle4);
 
-            // UK Tax Residency
-            Chunk ukTaxResidencyChunk = selfDisclosure.isUkTaxResidency() ? new Chunk("Ja", fontContent) : new Chunk("Nein", fontContent);
-            Paragraph ukTaxResidencyParagraph = new Paragraph("Haben Sie eine steuerliche Ansässigkeit in UK? ");
-            ukTaxResidencyParagraph.add(ukTaxResidencyChunk);
-            document.add(ukTaxResidencyParagraph);
+            // Table for checkbox values in Subtitle 4
+            PdfPTable checkboxTableSubtitle4 = new PdfPTable(2);
+            checkboxTableSubtitle4.setWidthPercentage(100);
+            checkboxTableSubtitle4.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 
-            if (selfDisclosure.isUkTaxResidency()) {
-                Paragraph ukTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, bestätigen Sie hiermit, dass Sie über die Richtlinie der Liechtensteinischen Treuhandkammer zur Vorgehensweise bei der Gründung und Verwaltung von Rechtsträgern für UK Personen unterrichtet wurden.");
+            // Set widths for the columns
+            float[] columnWidthsSubtitle4 = {0.2f, 3.5f}; // Adjusted the left column width to be smaller
+            checkboxTableSubtitle4.setWidths(columnWidthsSubtitle4);
+
+            // UK Tax Residency with checkboxes
+            boolean ukTaxResidencyValue = selfDisclosure.isUkTaxResidency();
+            String ukTaxResidencyLabel = "Haben Sie eine steuerliche Ansässigkeit in UK? \n ";
+            addCheckboxRow(checkboxTableSubtitle4, ukTaxResidencyLabel, ukTaxResidencyValue);
+
+            if (ukTaxResidencyValue) {
+                Paragraph ukTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, bestätigen Sie" +
+                        " hiermit, dass Sie über die Richtlinie der Liechtensteinischen Treuhandkammer zur Vorgehensweise bei der Gründung " +
+                        "und Verwaltung von Rechtsträgern für UK Personen unterrichtet wurden.");
                 document.add(ukTaxResidencyConfirmation);
             }
 
-            Paragraph subtitle5 = new Paragraph("5. Politisch exponierte Person (PEP)", fontSubTitle);
+            Paragraph ukTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, bestätigen Sie hiermit, dass Sie über die Richtlinie \n" +
+                    "der Liechtensteinischen Treuhandkammer zur Vorgehensweise bei der Gründung und Verwaltung \n" +
+                    "von Rechtsträgern für UK Personen unterrichtet wurden.\n");
+
+
+            document.add(checkboxTableSubtitle4);
+            document.add(ukTaxResidencyConfirmation);
+
+            // Subtitle 5
+            Paragraph subtitle5 = new Paragraph("\n5. Politisch exponierte Person (PEP)\n", fontSubTitle);
             document.add(subtitle5);
 
-            // PEP questions
-            Chunk pepChunk = selfDisclosure.isPoliticallyExposedPerson() ? new Chunk("Ja", fontContent) : new Chunk("Nein", fontContent);
-            Paragraph pepParagraph = new Paragraph("Sind Sie eine politisch exponierte Person (PEP)? ");
-            pepParagraph.add(pepChunk);
-            document.add(pepParagraph);
+            // Table for checkbox values in Subtitle 5
+            PdfPTable checkboxTableSubtitle5 = new PdfPTable(2);
+            checkboxTableSubtitle5.setWidthPercentage(100);
+            checkboxTableSubtitle5.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 
-            if (selfDisclosure.isPoliticallyExposedPerson()) {
-                Paragraph pepPosition = new Paragraph("Falls ja, in welchem/r Amt/Funktion? " + selfDisclosure.getPepAssociatedPosition());
-                document.add(pepPosition);
+            // Set widths for the columns
+            float[] columnWidthsSubtitle5 = {0.2f, 3.5f}; // Adjusted the left column width to be smaller
+            checkboxTableSubtitle5.setWidths(columnWidthsSubtitle5);
+
+            // PEP questions with checkboxes
+            boolean pepValue = selfDisclosure.isPoliticallyExposedPerson();
+            String pepLabel = "Sind Sie eine politisch exponierte Person (PEP)? \n ";
+            addCheckboxRow(checkboxTableSubtitle5, pepLabel, pepValue);
+
+            if (pepValue) {
 
                 Paragraph relatedToPep = new Paragraph("Haben Sie ein Naheverhältnis (unmittelbares Familienmitglied, enge Geschäftsbeziehung, sozial oder politisch enge Verbundenheit) zu einer politisch exponierten Person?");
-                Chunk relatedToPepChunk = selfDisclosure.isRelatedToPep() ? new Chunk("Ja", fontContent) : new Chunk("Nein", fontContent);
-                relatedToPep.add(relatedToPepChunk);
-                document.add(relatedToPep);
+                boolean relatedToPepValue = selfDisclosure.isRelatedToPep();
+                Paragraph relatedToPepParagraph = new Paragraph(relatedToPep);
+                addCheckboxRow2(checkboxTableSubtitle5, relatedToPepParagraph, relatedToPepValue);
 
-                if (selfDisclosure.isRelatedToPep()) {
-                    Paragraph relatedPersonDetails = new Paragraph("Falls im Naheverhältnis, Art/Name/Vorname der nahestehenden Person, Amt und Funktion? " + selfDisclosure.getRelatedPersonDetails());
-                    document.add(relatedPersonDetails);
-                }
             }
+            document.add(checkboxTableSubtitle5);
+            Paragraph pepPosition = new Paragraph("Falls ja, in welchem/r Amt/Funktion? \n " + "Amt/Funktion: " + selfDisclosure.getPepAssociatedPosition());
+            document.add(pepPosition);
+            Paragraph relatedPersonDetails = new Paragraph("Falls im Naheverhältnis, Art/Name/Vorname der nahestehenden Person, Amt und Funktion? \n " + "Name/Vorname, Amt/Funktion: " + selfDisclosure.getRelatedPersonDetails());
+            document.add(relatedPersonDetails);
 
 
-            Paragraph subtitle6 = new Paragraph("6. Rechtliche Hinweise und Steuerkonformitätserklärung", fontSubTitle);
+            Paragraph subtitle6 = new Paragraph("\n6. Rechtliche Hinweise und Steuerkonformitätserklärung\n", fontSubTitle);
             document.add(subtitle6);
 
             // Add the additional text before the signature
@@ -253,11 +314,12 @@ public class SelfDisclosurePDFGeneratorService {
         }
     }
 
-
     private void addCell(PdfPTable table, String label, String value) {
         Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        Font contentFont = FontFactory.getFont(FontFactory.HELVETICA); // New content font
+
         PdfPCell labelCell = new PdfPCell(new Phrase(label, boldFont));
-        PdfPCell valueCell = new PdfPCell(new Phrase(value));
+        PdfPCell valueCell = new PdfPCell(new Phrase(value, contentFont)); // Updated to use contentFont
 
         // Set cell properties
         labelCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -270,5 +332,45 @@ public class SelfDisclosurePDFGeneratorService {
         table.addCell(labelCell);
         table.addCell(valueCell);
     }
+
+    // Function to add checkbox rows to the table
+    private void addCheckboxRow(PdfPTable table, String label, boolean value) {
+        Font fontContent = FontFactory.getFont(FontFactory.HELVETICA);
+        fontContent.setSize(12);
+
+        Chunk checkbox = value ? new Chunk("[X] ", fontContent) : new Chunk("[ ] ", fontContent);
+
+        PdfPCell checkboxCell = new PdfPCell(new Phrase(checkbox));
+        checkboxCell.setBorder(Rectangle.NO_BORDER);
+        checkboxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        checkboxCell.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+
+        PdfPCell labelCell = new PdfPCell(new Phrase(label, FontFactory.getFont(FontFactory.HELVETICA, 12)));
+        labelCell.setBorder(Rectangle.NO_BORDER);
+        labelCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        table.addCell(checkboxCell);
+        table.addCell(labelCell);
+    }
+
+    private void addCheckboxRow2(PdfPTable table, Paragraph label, boolean value) {
+        Font fontContent = FontFactory.getFont(FontFactory.HELVETICA);
+        fontContent.setSize(12);
+
+        Chunk checkbox = value ? new Chunk("[X] ", fontContent) : new Chunk("[ ] ", fontContent);
+
+        PdfPCell checkboxCell = new PdfPCell(new Phrase(checkbox));
+        checkboxCell.setBorder(Rectangle.NO_BORDER);
+        checkboxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        checkboxCell.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+
+        PdfPCell labelCell = new PdfPCell(label);
+        labelCell.setBorder(Rectangle.NO_BORDER);
+        labelCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+        table.addCell(checkboxCell);
+        table.addCell(labelCell);
+    }
+
 }
 

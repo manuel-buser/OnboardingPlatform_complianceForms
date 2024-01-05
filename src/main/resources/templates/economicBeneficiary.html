@@ -52,6 +52,29 @@
     display: block;
     margin-bottom: 10px;
   }
+
+</style>
+
+  <!-- Additional Styling for the customer table -->
+  <style>
+     /* Additional spacing and larger table */
+    #customerTable {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      width: 80%;
+      border-collapse: collapse;
+    }
+
+    #customerTable th,
+    #customerTable td {
+      padding: 10px;
+      border: 1px solid black;
+    }
+
+    #customerTable th {
+      text-align: left;
+    }
+  </style>
 </style>
 
 </head>
@@ -65,44 +88,59 @@
 
   <!-- Wirtschaftlich Berechtigter Questions -->
   <h3>1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers</h3>
-
+<div>
     <label>
       <input type="checkbox" name="identicalToContractPartner"/>
       Die nachstehende Person ist mit dem Vertragspartner identisch
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="identicalToWealthContributor"/>
     Die nachstehende Person ist mit dem Vermögenseinbringer identisch
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="memberOfLeadershipBody"/>
     Die nachstehende Person ist Mitglied des leitenden Organs (Stiftungs-, Verwaltungsrat, Treunehmer)
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="protectorOrSimilar" />
     Die nachstehende Person ist Protektor, Kurator oder mit ähnlichen Kompetenzen ausgestattete Person
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="beneficiaryOrPotential"/>
     Die nachstehende Person ist Begünstigte, oder der Kreis von Personen, die als Begünstigte in Frage kommen des obigen Rechtsträgers
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="holdsMoreThan25PercentShares"/>
     Die nachstehende Person hält Anteile/Stimmrechte von >25% oder ist mit >25% am Gewinn beteiligt
   </label><br/>
+</div>
 
+<div>
   <label>
     <input type="checkbox" name="exercisesControlOverManagement"/>
     Die nachstehende Person übt auf andere Weise die Kontrolle über die Geschäftsführung oder letztlich direkt/indirekt die Kontrolle über das Vermögen des obigen Rechtsträgers aus
   </label><br/>
+</div>
 
-
-      <h3>3. Rechtliche Hinweise</h3>
+    <!-- Customer Details table -->
+    <div id="customerTable"></div>
+    <div>
+    <h3>3. Rechtliche Hinweise</h3>
       <p>
         Eine vorsätzlich oder fahrlässig falsch erteilte Erklärung ist strafbar. Selbiges gilt, wenn Änderungen der Gegebenheiten nicht mitgeteilt werden oder über Änderungen der Gegebenheiten falsche Angaben gemacht werden.
       </p>
@@ -112,6 +150,7 @@
       <p>
         Ich nehme darüber hinaus zur Kenntnis und bin damit einverstanden, dass im Falle einer Konto-/Depoteröffnung bei einer Bank der Inhalt dieser Erklärung der Bank gegenüber bekannt zu geben ist.
       </p>
+    </div>
 
     <!-- Signature Section -->
     <div>
@@ -119,18 +158,14 @@
       <input type="text" id="currentPlace" name="currentPlace" placeholder="Ort eingeben" />
       <p>Unterschreiben Sie bitte im nachfolgenden Feld.</p>
       <p><b>Unterschrift:</b></p>
-      <canvas height="100" width="300" class="signature-pad"></canvas>
+      <canvas height="150" width="400" class="signature-pad"></canvas>
       <p>
         <a href="#" class="clear-button" onclick="clearCanvas()">Clear</a>
       </p>
 
-      <!-- Buttons -->
+      <!-- Button -->
       <div>
-        <button type="button" onclick="saveData()">Save Data</button>
-        <br> <!-- Line break to ensure buttons are vertically spaced -->
-        <button type="button" onclick="generatePDF()">Generate PDF</button>
-        <br> <!-- Line break to ensure buttons are vertically spaced -->
-        <button type="button" onclick="navigateNext()">Next Page</button>
+        <button type="button" onclick="saveGenerateRedirect()" class="btn btn-secondary">Save & Next</button>
       </div>
     </div>
 
@@ -145,9 +180,9 @@
 </div>
 </div>
 
-
-<!-- link to the javascript file for the logic -->
 <script>
+
+// Script for the Canvas element where you can sign
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -188,8 +223,22 @@ function clearCanvas() {
 </script>
 
 <script>
+
+// Script to save EconomicBeneficiary data to the database, generate PDF and redirect to the next page
+
+function saveGenerateRedirect() {
+    console.log("Save & Next Button clicked");
+
+    // Call all three functions below (wanted to have only 1 button - so I took everything together)
+
+    saveData();
+
+    generatePDF();
+
+    navigateNext();
+}
+
  function saveData() {
-    console.log("Save Data Button clicked");
 
     var form = document.getElementById("economicBeneficiaryForm");
     var formData = new FormData(form);
@@ -216,7 +265,7 @@ function clearCanvas() {
                 console.log("EconomicBeneficiary Data saved successfully");
             } else {
                 console.error('Error:', xhr.status);
-                // Handle error cases here for saving EconomicBeneficiary data
+
             }
         }
     };
@@ -225,7 +274,6 @@ function clearCanvas() {
 }
 
 function generatePDF() {
-    console.log("Generate PDF & Redirect Button clicked");
 
     // Retrieve customerId, economicBeneficiaryId, and currentPlace from the form
     var customerIdInput = document.getElementById("customerId");
@@ -275,6 +323,60 @@ function navigateNext() {
     window.location.href = "/selfDisclosure";
 
   }
+
+</script>
+<script>
+
+// Script to fetch customer details to the table from the database
+
+ // get values from the database
+    function fetchCustomerData() {
+      const customerId = document.getElementById('customerId').value;
+
+      fetch(`/getCustomer/${customerId}`)
+        .then(response => response.json())
+        .then(data => populateTable(data))
+        .catch(error => console.error('Error fetching customer data:', error));
+    }
+
+    // Function to populate the HTML table with specific customer data
+    function populateTable(customerData) {
+      const table = document.createElement('table');
+      table.id = 'customerTable';
+
+      // Map customer attributes to their displayed names
+      const attributeMap = {
+        firstName: 'Vorname:',
+        lastName: 'Nachname:',
+        birthDate: 'Geburtstag:',
+        nationality: 'Nationalität:',
+        streetName: 'Strasse:',
+        streetNumber: 'Nummer:',
+        plzNumber: 'PLZ:',
+        city: 'Stadt:',
+        country: 'Wohnsitzstaat:',
+        taxCountry: 'Wohnsitz steuerlich:',
+        taxIdentificationNumber: 'Steueridentifikations-Nr./TIN:'
+      };
+
+      // Create table rows and cells for specific customer attributes
+      for (const key in attributeMap) {
+        const row = table.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+
+        cell1.innerHTML = `<b>${attributeMap[key]}</b>`; // Attribute name
+        cell2.innerHTML = customerData[key]; // Attribute value
+      }
+
+      // Add the table to the HTML document
+      const tableContainer = document.getElementById('customerTable');
+      tableContainer.innerHTML = '';
+      tableContainer.appendChild(table);
+    }
+
+    // Fetch and populate the table when the page loads
+    document.addEventListener('DOMContentLoaded', fetchCustomerData);
 
 </script>
 </body>

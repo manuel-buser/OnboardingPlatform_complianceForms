@@ -36,7 +36,7 @@ public class EconomicBeneficiaryPDFGeneratorService {
 
         Document document = new Document(PageSize.A4);
         Font fontContent = FontFactory.getFont(FontFactory.HELVETICA);
-        fontContent.setSize(12);
+        fontContent.setSize(10);
 
         // Create an instance of LogoReader
         LogoReader logoReader = new LogoReader();
@@ -48,10 +48,10 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 document.open();
 
                 Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-                fontTitle.setSize(18);
+                fontTitle.setSize(14);
 
                 Font fontSubTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-                fontSubTitle.setSize(12);
+                fontSubTitle.setSize(11);
 
                 // Main Title
                 // Convert the BufferedImage to iText's Image format
@@ -112,12 +112,32 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 // Subtitle 1
                 Paragraph subtitle1 = new Paragraph("1. Feststellung der letztlich wirtschaftlich berechtigten Person (kurz WB) des Rechtsträgers", fontSubTitle);
                 document.add(subtitle1);
+
+                // Table for checkbox values in Subtitle 1
+                PdfPTable checkboxTable = new PdfPTable(2);
+                checkboxTable.setWidthPercentage(100);
+                checkboxTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+                // Set widths for the columns
+                float[] columnWidths = {0.2f, 3.5f}; // Adjusted the left column width to be smaller
+                checkboxTable.setWidths(columnWidths);
+
                 for (int i = 0; i < checkboxLabelsSubtitle1.length; i++) {
                     Chunk checkbox = checkboxValuesSubtitle1[i] ? new Chunk("[X] ", fontContent) : new Chunk("[ ] ", fontContent);
-                    Paragraph paragraph = new Paragraph(checkbox);
-                    paragraph.add(new Phrase(checkboxLabelsSubtitle1[i], fontContent));
-                    document.add(paragraph);
+                    PdfPCell checkboxCell = new PdfPCell(new Phrase(checkbox));
+                    checkboxCell.setBorder(Rectangle.NO_BORDER);
+                    checkboxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    checkboxCell.setHorizontalAlignment(Element.ALIGN_LEFT); // Align checkbox value left-centred
+
+                    PdfPCell labelCell = new PdfPCell(new Phrase(checkboxLabelsSubtitle1[i], FontFactory.getFont(FontFactory.HELVETICA, 14)));
+                    labelCell.setBorder(Rectangle.NO_BORDER);
+                    labelCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+                    checkboxTable.addCell(checkboxCell);
+                    checkboxTable.addCell(labelCell);
                 }
+
+                document.add(checkboxTable);
 
                 // Create the customer details table
                 PdfPTable customerDetailsTable = new PdfPTable(2);
@@ -147,10 +167,10 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 String additionalText =
                         "Eine vorsätzlich oder fahrlässig falsch erteilte Erklärung ist strafbar. Selbiges gilt, wenn " +
                                 "Änderungen der Gegebenheiten nicht mitgeteilt werden oder über Änderungen der Gegebenheiten " +
-                                "falsche Angaben gemacht werden.\n\n" +
+                                "falsche Angaben gemacht werden.\n" +
                                 "Ich, der unterzeichnende Vertragspartner bestätige die Richtigkeit und Vollständigkeit " +
                                 "sämtlicher von mir gemachten Angaben. Ich verpflichte mich, allfällige Änderungen unaufgefordert " +
-                                "und unverzüglich CorPa Treuhand AG schriftlich mitzuteilen.\n\n" +
+                                "und unverzüglich CorPa Treuhand AG schriftlich mitzuteilen.\n" +
                                 "Ich nehme darüber hinaus zur Kenntnis und bin damit einverstanden, dass im Falle einer " +
                                 "Konto-/Depoteröffnung bei einer Bank der Inhalt dieser Erklärung der Bank gegenüber bekannt zu geben ist.";
 
@@ -158,7 +178,7 @@ public class EconomicBeneficiaryPDFGeneratorService {
                 Paragraph additionalParagraph = new Paragraph(additionalText, fontContent);
                 document.add(additionalParagraph);
 
-                Paragraph placeAndDate = new Paragraph("\n\nOrt und Datum: " + currentPlace + ", " + formattedDate, fontContent);
+                Paragraph placeAndDate = new Paragraph("\nOrt und Datum: " + currentPlace + ", " + formattedDate, fontContent);
                 document.add(placeAndDate);
 
                 // Generate the signature image from the decoded byte array

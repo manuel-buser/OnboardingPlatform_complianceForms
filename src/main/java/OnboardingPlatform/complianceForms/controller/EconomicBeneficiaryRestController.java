@@ -55,7 +55,7 @@ public class EconomicBeneficiaryRestController {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");
-        String filePath = classpath + "\\src\\main\\resources\\PDFs\\";
+        String filePath = classpath + "\\src\\main\\resources\\PDFs\\EconomicBeneficiary\\";
 
         //if the path doesn't exist, create it
         File file = new File(filePath);

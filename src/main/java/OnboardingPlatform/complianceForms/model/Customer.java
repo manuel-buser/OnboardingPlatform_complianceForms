@@ -19,21 +19,17 @@ public class Customer {
     private String lastName;
     private String birthDate;
     private String nationality;
-        private String streetName;
-
-    // changed to string because I needed non-primitive data type for the service class method update
-        private String streetNumber;
-    // changed to string because I needed non-primitive data type for the service class method update
+    private String streetName;
+    private String streetNumber;
     private String plzNumber;
-
     private String city;
     private String country;
     private String taxCountry;
     private String taxIdentificationNumber;
-
-    // changed to string because I needed non-primitive data type for the service class method update
     private String phoneNumber;
     private String emailAddress;
     private String jobTitle;
+
+    // changed some int to String because it was easier to implement some methods in the Service class with non-primitive datatype
 
 }
