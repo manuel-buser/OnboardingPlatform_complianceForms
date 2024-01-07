@@ -2,11 +2,14 @@ package OnboardingPlatform.complianceForms.controller;
 
 import OnboardingPlatform.complianceForms.model.Customer;
 import OnboardingPlatform.complianceForms.model.SelfDisclosure;
+import OnboardingPlatform.complianceForms.service.CustomerService;
+import OnboardingPlatform.complianceForms.service.DataProtectionPDFGeneratorService;
 import OnboardingPlatform.complianceForms.service.SelfDisclosurePDFGeneratorService;
 import OnboardingPlatform.complianceForms.service.SelfDisclosureService;
-import OnboardingPlatform.complianceForms.service.CustomerService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,45 +18,23 @@ import java.util.Base64;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/selfDisclosure")
-public class SelfDisclosureRestController {
+public class DataProtectionRestController {
 
-    private final SelfDisclosurePDFGeneratorService selfDisclosurePdfGeneratorService;
+    private final DataProtectionPDFGeneratorService dataProtectionPDFGeneratorService;
     private final CustomerService customerService;
-    private final SelfDisclosureService selfDisclosureService;
 
-    public SelfDisclosureRestController(SelfDisclosurePDFGeneratorService selfDisclosurePdfGeneratorService, CustomerService customerService,
+    public DataProtectionRestController(DataProtectionPDFGeneratorService dataProtectionPDFGeneratorService, CustomerService customerService,
                                         SelfDisclosureService selfDisclosureService) {
-        this.selfDisclosurePdfGeneratorService = selfDisclosurePdfGeneratorService;
+        this.dataProtectionPDFGeneratorService = dataProtectionPDFGeneratorService;
         this.customerService = customerService;
-        this.selfDisclosureService = selfDisclosureService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Integer> addSelfDisclosure(@RequestBody SelfDisclosure selfDisclosure, @RequestParam("customerId") int customerId) {
-        Customer customer = customerService.getCustomerById(customerId);
-        selfDisclosure.setCustomer(customer); // Set the retrieved customer
-
-        int selfDisclosureId = selfDisclosureService.saveSelfDisclosure(selfDisclosure);
-        return ResponseEntity.ok(selfDisclosureId);
-    }
-
-    @GetMapping("/get/{id}")
-    public SelfDisclosure getSelfDisclosureById(@PathVariable int id) {
-        return selfDisclosureService.getSelfDisclosureById(id);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String deleteSelfDisclosure(@PathVariable int id) {
-        return selfDisclosureService.deleteSelfDisclosureById(id);
-    }
-
-    @PostMapping("/pdf/generate/selfDisclosure")
+    @PostMapping("/pdf/generate/dataProtection")
     public void generatePDF(@RequestBody Map<String, Object> formData) throws IOException {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");
-        String filePath = classpath + "\\src\\main\\resources\\PDFs\\SelfDisclosure\\";
+        String filePath = classpath + "\\src\\main\\resources\\PDFs\\DataProtection\\";
 
         //if the path doesn't exist, create it
         File file = new File(filePath);
@@ -68,15 +49,9 @@ public class SelfDisclosureRestController {
 
         // Retrieve the customer and selfDisclosure by using the customer ID
         Customer customer = customerService.getCustomerById(customerId);
-        SelfDisclosure selfDisclosure = selfDisclosureService.getSelfDisclosureByCustomerId(customerId);
 
         // URL decode the encoded signature
         String decodedSignature = java.net.URLDecoder.decode(encodedSignature, StandardCharsets.UTF_8);
-
-        // here the decoded signature is stored like this:
-        // data:image/png;base64,iVBORw0KGgoAAAANSUhE....
-        // and we have to take away everything in front of the first , (comma)
-        // otherwise we get an illegal base64 char error
 
         int indexOfComma = decodedSignature.indexOf(",");
 
@@ -92,6 +67,8 @@ public class SelfDisclosureRestController {
 
 
         // Use retrieved customer, selfDisclosure, and signature in PDF generation
-        this.selfDisclosurePdfGeneratorService.exportToFileSelf(filePath, customer, selfDisclosure, signatureBytes, currentPlace);
+        this.dataProtectionPDFGeneratorService.exportToFileDataProtection(filePath, customer, signatureBytes, currentPlace);
     }
+
+
 }

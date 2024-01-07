@@ -183,7 +183,7 @@
                 <!-- Buttons -->
                 <div>
                     <button type="button" onclick="saveData()">Save Data</button>
-                    <br> <!-- Line break to ensure buttons are vertically spaced -->
+
                     <button type="button" onclick="generatePDF()">Generate PDF</button>
                     <br> <!-- Line break to ensure buttons are vertically spaced -->
                     <button type="button" onclick="navigateNext()">Next Page</button>
@@ -298,7 +298,7 @@ function clearCanvas() {
       currentPlace: currentPlace
     };
 
-    fetch('/selfDisclosure/pdf/generate', {
+    fetch('/selfDisclosure/pdf/generate/selfDisclosure', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

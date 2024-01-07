@@ -24,13 +24,25 @@ public class Controller {
     }
 
     @GetMapping("/")
-    public String getAddCustomerPage(Model model) {
+    public String getPersonalDataHTML(Model model) {
         model.addAttribute("customer", new Customer());
         return "personalData";
     }
 
+    @GetMapping("/dataProtection")
+    public String getDataProtectionHTML(Model model) {
+        Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();
+
+        if (lastCreatedCustomer != null) {
+            int customerId = lastCreatedCustomer.getCustomerId();
+            model.addAttribute("customerId", customerId);
+        }
+
+        return "dataProtection";
+    }
+
     @GetMapping("/economicBeneficiary")
-    public String renderEconomicBeneficiaryPage(Model model) {
+    public String getEconomicBeneficiaryHTML(Model model) {
         Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();
         EconomicBeneficiary lastCreatedBeneficiary = economicBeneficiaryService.getLastCreatedBeneficiary();
 
@@ -48,7 +60,7 @@ public class Controller {
     }
 
     @GetMapping("/selfDisclosure")
-    public String getSelfDisclosureHtml(Model model) {
+    public String getSelfDisclosureHTML(Model model) {
         Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();
         SelfDisclosure lastCreatedSelfDisclosure = selfDisclosureService.getLastCreatedSelfDisclosure();
 
