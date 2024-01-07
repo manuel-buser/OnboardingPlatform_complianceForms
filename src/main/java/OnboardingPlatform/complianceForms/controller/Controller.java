@@ -41,6 +41,11 @@ public class Controller {
         return "dataProtection";
     }
 
+    @GetMapping("/informationLetter")
+    public String getInformationLetterHTML() {
+        return "informationLetter";
+    }
+
     @GetMapping("/economicBeneficiary")
     public String getEconomicBeneficiaryHTML(Model model) {
         Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();

@@ -39,19 +39,7 @@ public class CustomerRestController {
         return customerService.deleteCustomerById(id);
     }
 
-    /*
-    @GetMapping("/getCustomerById")
-    @ResponseBody
-    public ResponseEntity<Customer> getCustomerById(@RequestParam int customerId) {
-    // Customer customer = customerService.getCustomerById(customerId);
-    // if (customer != null) {
-    //     return ResponseEntity.ok(customer);
-    // } else {
-    //     return ResponseEntity.notFound().build();
-    // }
-    // Commented out the entire method to disable its functionality.
-    }
-*/
+
 
 }
 

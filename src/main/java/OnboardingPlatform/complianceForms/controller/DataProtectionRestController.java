@@ -30,7 +30,7 @@ public class DataProtectionRestController {
     }
 
     @PostMapping("/pdf/generate/dataProtection")
-    public void generatePDF(@RequestBody Map<String, Object> formData) throws IOException {
+    public void generatePDFDataProtection(@RequestBody Map<String, Object> formData) throws IOException {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");

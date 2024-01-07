@@ -51,7 +51,7 @@ public class EconomicBeneficiaryRestController {
     }
 
     @PostMapping("/pdf/generate/economicBeneficiary")
-    public void generatePDF(@RequestBody Map<String, Object> formData) throws IOException {
+    public void generatePDFEconomicBeneficiary(@RequestBody Map<String, Object> formData) throws IOException {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");

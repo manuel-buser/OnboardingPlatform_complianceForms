@@ -156,7 +156,7 @@ public class DataProtectionPDFGeneratorService {
                             "3.1. Ihre Daten erheben wir direkt (Besprechungen und Korrespondenz) " +
                             "oder über interne Hinter-grund- und Sorgfaltspflichtabklärungen.\n" +
                             "3.2. Allenfalls können Daten durch Dritte Dienstleister erhoben werden. " +
-                            "Dritte Dienstleister können insbesondere sein:" +
+                            "Dritte Dienstleister können insbesondere sein:\n" +
                             "• Banken;\n" +
                             "• Vermögensverwalter;\n" +
                             "• Revisoren.";
@@ -165,15 +165,15 @@ public class DataProtectionPDFGeneratorService {
             document.add(dataOriginPara);
 
             // Content for recipients of the collected personal data
-            Paragraph titleParagraph4 = new Paragraph("\n4.\t Empfänger der erhobenen personenbezogenen Daten\n", fontSubTitle);
+            Paragraph titleParagraph4 = new Paragraph("\n\n4.\t Empfänger der erhobenen personenbezogenen Daten\n", fontSubTitle);
             document.add(titleParagraph4);
 
             String dataRecipients =
                             "4.1. Ihre Daten werden von uns ausschließlich zur Erfüllung unserer vertraglichen, " +
                             "gesetzlichen und aufsichtsrechtlichen Pflichten zu den unter Ziff. 2.2. aufgeführten " +
-                            "Zwecken verarbeitet.\n\n" +
-                            "4.2. Hierzu können insbesondere folgende externe Dienstleister Daten erhalten:\n\n" +
-                            "• Banken;" +
+                            "Zwecken verarbeitet.\n" +
+                            "4.2. Hierzu können insbesondere folgende externe Dienstleister Daten erhalten:\n" +
+                            "• Banken;\n" +
                             "• Vermögensverwalter;\n" +
                             "• Versicherungen;\n" +
                             "• Rechtsanwälte;\n" +
@@ -243,7 +243,7 @@ public class DataProtectionPDFGeneratorService {
 
             // End of the document
 
-            Paragraph placeAndDate = new Paragraph("\n\nOrt und Datum: " + currentPlace + ", " + formattedDate, fontContent);
+            Paragraph placeAndDate = new Paragraph("\nOrt und Datum: " + currentPlace + ", " + formattedDate, fontContent);
             document.add(placeAndDate);
 
             // Generate the signature image from the decoded byte array

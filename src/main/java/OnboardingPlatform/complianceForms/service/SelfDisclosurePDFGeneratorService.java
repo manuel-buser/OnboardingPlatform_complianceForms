@@ -193,7 +193,7 @@ public class SelfDisclosurePDFGeneratorService {
             Paragraph euTaxResidencyConfirmation = new Paragraph("Falls Sie die Frage mit „Ja“ beantwortet haben, " +
                     "bestätigen Sie hiermit, dass Sie über die EU-Steuer- transparenzrichtlinie 2018/822/EU DAC6 unterrichtet" +
                     " wurden und Ihnen das Kunden-Informations- schreiben EU-Steuertransparenzrichtlinie DAC6 der CorPa " +
-                    "Treuhand AG ausgehändigt wurde.\n");
+                    "Treuhand AG ausgehändigt wurde.\n\n\n");
 
             document.add(checkboxTableSubtitle3);
             document.add(euTaxResidencyConfirmation);

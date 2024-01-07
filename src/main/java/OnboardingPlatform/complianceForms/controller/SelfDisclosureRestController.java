@@ -49,7 +49,7 @@ public class SelfDisclosureRestController {
     }
 
     @PostMapping("/pdf/generate/selfDisclosure")
-    public void generatePDF(@RequestBody Map<String, Object> formData) throws IOException {
+    public void generatePDFSelfDisclosure(@RequestBody Map<String, Object> formData) throws IOException {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");
