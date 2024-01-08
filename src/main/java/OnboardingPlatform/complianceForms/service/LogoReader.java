@@ -10,7 +10,7 @@ public class LogoReader {
         BufferedImage companyLogo = null;
         try {
             // Load the image file
-            File logoFile = new File(getClass().getResource("/CompanyLogo.jpg").getFile());
+            File logoFile = new File(getClass().getResource("/static/CompanyLogo.jpg").getFile());
             companyLogo = ImageIO.read(logoFile);
 
         } catch (IOException e) {

@@ -24,7 +24,7 @@ public class InformationLetterRestController {
     @PostMapping("/pdf/generate/informationLetter")
     public void generatePDFDataProtection() throws IOException {
         String classpath = System.getProperty("user.dir");
-        String filePath = classpath + "\\src\\main\\resources\\PDFs\\InformationLetter\\";
+        String filePath = classpath + "\\src\\main\\resources\\static\\PDFs\\InformationLetter\\";
 
         File file = new File(filePath);
         if (!file.exists()) {

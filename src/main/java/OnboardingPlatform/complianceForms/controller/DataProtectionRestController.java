@@ -34,7 +34,7 @@ public class DataProtectionRestController {
 
         //get the classpath and point it to the PDFs folder
         String classpath = System.getProperty("user.dir");
-        String filePath = classpath + "\\src\\main\\resources\\PDFs\\DataProtection\\";
+        String filePath = classpath + "\\src\\main\\resources\\static\\PDFs\\DataProtection\\";
 
         //if the path doesn't exist, create it
         File file = new File(filePath);

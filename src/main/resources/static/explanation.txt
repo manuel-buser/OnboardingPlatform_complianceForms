@@ -1,0 +1,4 @@
+ Purpose of this directory:
+
+ A common approach is to expose a specific directory as a static resource
+ so that files within it can be accessed directly via the web server.

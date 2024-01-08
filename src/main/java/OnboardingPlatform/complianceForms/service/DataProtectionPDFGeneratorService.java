@@ -21,6 +21,8 @@ import java.util.Date;
 @Service
 public class DataProtectionPDFGeneratorService {
 
+    private String lastGeneratedFileDataProtection;
+
     public void exportToFileDataProtection(String filePath, Customer customer, byte[] signatureBytes, String currentPlace) throws IOException {
 
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-dd-MM_hh-mm-ss");
@@ -28,6 +30,12 @@ public class DataProtectionPDFGeneratorService {
 
         String fileName = "DataProtection" + currentDateTime + ".pdf";
         String completeFilePath = filePath + "/" + fileName;
+
+        String shortFilePath = "/PDFs/DataProtection/";
+
+        lastGeneratedFileDataProtection = shortFilePath + fileName;
+
+        System.out.println(lastGeneratedFileDataProtection);
 
         Date currentDateForSignature = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -265,6 +273,10 @@ public class DataProtectionPDFGeneratorService {
                 document.close();
             }
         }
+    }
+
+    public String getLastGeneratedFileDataProtection() {
+        return lastGeneratedFileDataProtection;
     }
 }
 

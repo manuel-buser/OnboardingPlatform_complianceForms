@@ -4,9 +4,62 @@
     <title>Add Customer</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+
+:root {
+            --primary-color: #999;
+        }
+
+        body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    /* Set dimensions to mimic A4 size */
+    width: 21cm; /* Width of A4 */
+    height: 27cm; /* Height of A4 */
+    margin: auto; /* Center the content */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    width: 100%;
+    padding: 2rem 3rem;
+}
+
+
+        h2 {
+            font-size: 25px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+         /* Additional styling for the logo */
+        .company-logo {
+    position: absolute;
+    top: 40px; /* Adjust as needed */
+    right: 480px; /* Adjust as needed */
+    width: 120px; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
+    z-index: 999; /* Ensure it's above other content */
+}
+        .copyright {
+            position: absolute;
+            top: 10px; /* Adjust top positioning */
+            left: 10px; /* Adjust left positioning */
+        }
+
+    </style>
 </head>
 <body>
 <div class="container mt-4">
+    <p>&copy; 2024 Corpa AG - All rights reserved.</p>
+    <img src="CompanyLogo.jpg" alt="Company Logo" class="company-logo">
+
     <h1>Bitte geben Sie nachfolgend Ihre Personalien an</h1>
     <form id="customerForm" th:object="${customer}" class="row">
         <!-- firstName Attribute Field -->
@@ -26,7 +79,7 @@
         </div>
         <!-- nationality Attribute Field -->
         <div class="form-group col-md-6">
-            <label for="nationality">Nationalität:</label>
+            <label for="nationality">Nationalitaet:</label>
             <input type="text" class="form-control" id="nationality" th:field="*{nationality}">
         </div>
         <!-- streetName Attribute Field -->
@@ -83,6 +136,8 @@
         <input type="hidden" id="customerId" th:value="${customerId}" />
         <!-- Save your data and Redirect Button -->
         <button type="button" onclick="saveAndRedirect()" class="btn btn-secondary">Save & Next</button>
+
+
     </form> <!-- Close the customerForm form here -->
 </div>
 <!-- JS Function to send the data to the DB and then redirects to the next page -->
@@ -112,7 +167,6 @@
         xhr.send(JSON.stringify(Object.fromEntries(formData)));
     }
 </script>
-
 
 </body>
 </html>

@@ -6,23 +6,51 @@
   <title>Wirtschaftlich Berechtigte Person</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-  :root {
-    --primary-color: #999;
-  }
+ :root {
+            --primary-color: #999;
+        }
 
-  body {
+        body {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.4;
-    padding: 0;
-    margin: 0;
+    padding: 1.5;
+    margin: 1.5;
     background-color: #fff;
-  }
-
-  .inside {
-    /* Removed background-color property to inherit body's background */
-    padding: 4rem 6rem;
+    /* Set dimensions to mimic A4 size */
+    width: 21cm; /* Width of A4 */
+    height: 56cm; /* Height of A4 */
+    margin: auto; /* Center the content */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}
+
+.container {
+    width: 100%;
+    padding: 2rem 3rem;
+}
+
+
+        h2 {
+            font-size: 25px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+         /* Additional styling for the logo */
+        .company-logo {
+    position: absolute;
+    top: 20px; /* Adjust as needed */
+    right: 480px; /* Adjust as needed */
+    width: 120px; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
+    z-index: 999; /* Ensure it's above other content */
+}
+        .copyright {
+            position: absolute;
+            top: 10px; /* Adjust top positioning */
+            left: 10px; /* Adjust left positioning */
+        }
 
   .signature-pad-form {
     max-width: 300px;
@@ -83,6 +111,8 @@
 
 <div class="inside">
 <div class="container">
+  <p>&copy; 2024 Corpa AG - All rights reserved.</p>
+  <img src="CompanyLogo.jpg" alt="Company Logo" class="company-logo">
   <h1>Feststellung der letztlich wirtschaftlich berechtigten Person (WB) des Rechtsträgers</h1>
   <form id="economicBeneficiaryForm" th:object="${EconomicBeneficiary}" class="row">
 

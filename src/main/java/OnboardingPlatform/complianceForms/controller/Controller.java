@@ -1,11 +1,10 @@
 package OnboardingPlatform.complianceForms.controller;
 
+import OnboardingPlatform.complianceForms.MailService.GMailer;
 import OnboardingPlatform.complianceForms.model.Customer;
 import OnboardingPlatform.complianceForms.model.EconomicBeneficiary;
 import OnboardingPlatform.complianceForms.model.SelfDisclosure;
-import OnboardingPlatform.complianceForms.service.CustomerService;
-import OnboardingPlatform.complianceForms.service.EconomicBeneficiaryService;
-import OnboardingPlatform.complianceForms.service.SelfDisclosureService;
+import OnboardingPlatform.complianceForms.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +14,19 @@ public class Controller {
     private final CustomerService customerService;
     private final EconomicBeneficiaryService economicBeneficiaryService;
     private final SelfDisclosureService selfDisclosureService;
+    private final DataProtectionPDFGeneratorService dataProtectionPDFGeneratorService;
+
+    private final GMailer gMailer;
 
     @Autowired
-    public Controller(CustomerService customerService, EconomicBeneficiaryService economicBeneficiaryService, SelfDisclosureService selfDisclosureService) {
+    public Controller(CustomerService customerService, EconomicBeneficiaryService economicBeneficiaryService,
+                      SelfDisclosureService selfDisclosureService, DataProtectionPDFGeneratorService dataProtectionPDFGeneratorService,
+                      GMailer gMailer) {
         this.customerService = customerService;
         this.economicBeneficiaryService = economicBeneficiaryService;
         this.selfDisclosureService = selfDisclosureService;
+        this.dataProtectionPDFGeneratorService = dataProtectionPDFGeneratorService;
+        this.gMailer = gMailer;
     }
 
     @GetMapping("/")
@@ -81,7 +87,19 @@ public class Controller {
         return "selfDisclosure";
     }
 
+    @GetMapping("/endingPage")
+    public String getEndingPageHTML() throws Exception { //throws MessagingException {
+
+        gMailer.sendMail("Subject", "Message");
+
+
+        return "endingPage";
+    }
+
 
 
 
 }
+
+
+

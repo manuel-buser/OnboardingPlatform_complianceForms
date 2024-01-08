@@ -6,22 +6,28 @@
     <title>Information nach Art. 13 EU-Datenschutz-Grundverordnung (DSGVO)</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        :root {
+:root {
             --primary-color: #999;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.4;
-            padding: 0;
-            margin: 0;
-            background-color: #fff;
-        }
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    /* Set dimensions to mimic A4 size */
+    width: 21cm; /* Width of A4 */
+    height: 83cm; /* Height of A4 */
+    margin: auto; /* Center the content */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        .inside {
-            padding: 4rem 6rem;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    width: 100%;
+    padding: 2rem 3rem;
+}
+
 
         h2 {
             font-size: 25px;
@@ -33,13 +39,18 @@
 
          /* Additional styling for the logo */
         .company-logo {
+    position: absolute;
+    top: 60px; /* Adjust as needed */
+    right: 480px; /* Adjust as needed */
+    width: 120px; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
+    z-index: 999; /* Ensure it's above other content */
+}
+        .copyright {
             position: absolute;
-            top: 10px; /* Adjust as needed */
-            right: 10px; /* Adjust as needed */
-            width: 100px; /* Adjust width */
-            height: auto; /* Maintain aspect ratio */
+            top: 10px; /* Adjust top positioning */
+            left: 10px; /* Adjust left positioning */
         }
-
           .signature-pad-form {
     max-width: 300px;
     margin: 0 auto;
@@ -77,9 +88,11 @@
 <body>
 
 <!-- Company Logo -->
-<img src="CompanyLogo.jpg" alt="Company Logo" class="company-logo">
 
 <div class="container mt-5">
+    <p>&copy; 2024 Corpa AG - All rights reserved.</p>
+    <img src="CompanyLogo.jpg" alt="Company Logo" class="company-logo">
+
     <div class="inside">
         <h1>Information nach Art. 13 EU-Datenschutz-Grundverordnung (DSGVO)</h1>
         <p>
@@ -283,6 +296,8 @@ function navigateNext() {
   }
 
 </script>
+<footer>
+</footer>
 
 </body>
 

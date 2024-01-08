@@ -6,22 +6,52 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
   :root {
-    --primary-color: #999;
-  }
+            --primary-color: #999;
+        }
 
-  body {
+body {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.4;
-    padding: 0;
-    margin: 0;
+    padding: 1cm;
+    margin: 1cm;
     background-color: #fff;
-  }
-
-  .inside {
-    /* Removed background-color property to inherit body's background */
-    padding: 4rem 6rem;
+    /* Set dimensions to mimic A4 size */
+    width: 21cm; /* Width of A4 */
+    height: 70cm; /* Height of A4 */
+    margin: auto; /* Center the content */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}
+
+.container {
+    width: calc(100% - 4rem); /* Adjust width to create padding around content */
+    padding: 2rem; /* Increase padding to create space */
+    margin: auto; /* Center content horizontally */
+}
+
+
+        h2 {
+            font-size: 25px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+         /* Additional styling for the logo */
+        .company-logo {
+    position: absolute;
+    top: 60px; /* Adjust as needed */
+    right: 480px; /* Adjust as needed */
+    width: 120px; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
+    z-index: 999; /* Ensure it's above other content */
+}
+        .copyright {
+    position: absolute;
+    top: 10px; /* Adjust top positioning */
+    left: 10px; /* Adjust left positioning */
+    z-index: 999; /* Ensure it's above other content */
+}
 
   .signature-pad-form {
     max-width: 300px;
@@ -58,6 +88,10 @@
 <body>
 <div class="inside">
     <div class="container">
+        <p>&copy; 2024 Corpa AG - All rights reserved.</p>
+        <img src="CompanyLogo.jpg" alt="Company Logo" class="company-logo">
+        <h1>Selbstauskunft</h1>
+
         <form id="selfDisclosureForm" th:object="${SelfDisclosure}" class="row">
 
             <!-- US - Person Questions -->
@@ -182,11 +216,7 @@
 
                 <!-- Buttons -->
                 <div>
-                    <button type="button" onclick="saveData()">Save Data</button>
-
-                    <button type="button" onclick="generatePDF()">Generate PDF</button>
-                    <br> <!-- Line break to ensure buttons are vertically spaced -->
-                    <button type="button" onclick="navigateNext()">Next Page</button>
+                    <button type="button" onclick="saveGenerateRedirect()" class="btn btn-secondary">Save & Next</button>
                 </div>
             </div>
 
@@ -243,6 +273,20 @@ function clearCanvas() {
 </script>
 
 <script>
+
+function saveGenerateRedirect() {
+    console.log("Save & Next Button clicked");
+
+    // Call all three functions below (wanted to have only 1 button - so I took everything together)
+
+    saveData();
+
+    generatePDF();
+
+    navigateNext();
+}
+
+
  function saveData() {
     console.log("Save Data Button clicked");
 
@@ -319,8 +363,9 @@ function clearCanvas() {
 
   function navigateNext() {
     console.log("Navigating to the next page");
-    window.location.href = "/selfDisclosure.html";
+    window.location.href = "/endingPage";
   }
 </script>
+
 </body>
 </html>

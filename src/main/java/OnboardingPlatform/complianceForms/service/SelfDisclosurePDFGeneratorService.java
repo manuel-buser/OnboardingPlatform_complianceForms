@@ -269,7 +269,7 @@ public class SelfDisclosurePDFGeneratorService {
 
             // Add the additional text before the signature
             String additionalText =
-                            "Eine vorsätzlich oder fahrlässig falsch erteilte Selbstauskunft ist strafbar. " +
+                    "Eine vorsätzlich oder fahrlässig falsch erteilte Selbstauskunft ist strafbar. " +
                             "Selbiges gilt, wenn Änderungen der Gegebenheiten nicht mitgeteilt werden oder " +
                             "über Änderungen der Gegebenheiten falsche Angaben gemacht werden.\n\n" +
                             "Mit meiner Unterschrift bestätige ich, dass alle von mir gemachten Angaben richtig " +
@@ -373,4 +373,3 @@ public class SelfDisclosurePDFGeneratorService {
     }
 
 }
-
