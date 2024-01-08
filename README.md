@@ -2,7 +2,7 @@
 ## Overview
 The Compliance Forms Web Application represents the third phase of digitizing the onboarding process for customers. The primary aim was to transition from a manual, paper-based compliance forms submission process to a streamlined web-based application. The system allows users to input required compliance information, digitally sign forms, and automate data population across multiple documents.
 
-# Demo Video
+## Demo Video
 A demo video can be found under:
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
