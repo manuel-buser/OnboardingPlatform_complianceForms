@@ -4,8 +4,7 @@ The Compliance Forms Web Application represents the third phase of digitizing th
 
 ## Demo Video
 A demo video can be found under:
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
+(https://fhnw365-my.sharepoint.com/:v:/r/personal/manuel_buser_students_fhnw_ch/Documents/Recordings/demo-onboarding-platform-compliance-forms-20240109_205357-Meeting%20Recording.mp4?csf=1&web=1&e=aB1IDV&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
 ## Technical Details
 ### Purpose
 **Objective**: Digitize the compliance form submission process.
