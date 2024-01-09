@@ -17,7 +17,7 @@ body {
     background-color: #fff;
     /* Set dimensions to mimic A4 size */
     width: 21cm; /* Width of A4 */
-    height: 70cm; /* Height of A4 */
+    height: 91cm; /* Height of A4 */
     margin: auto; /* Center the content */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -82,6 +82,26 @@ body {
     margin-bottom: 10px;
   }
 </style>
+    <!-- Additional Styling for the customer table -->
+    <style>
+     /* Additional spacing and larger table */
+    #customerTable {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      width: 80%;
+      border-collapse: collapse;
+    }
+
+    #customerTable th,
+    #customerTable td {
+      padding: 10px;
+      border: 1px solid black;
+    }
+
+    #customerTable th {
+      text-align: left;
+    }
+  </style>
 
 </head>
 
@@ -93,6 +113,9 @@ body {
         <h1>Selbstauskunft</h1>
 
         <form id="selfDisclosureForm" th:object="${SelfDisclosure}" class="row">
+
+            <!-- Customer Details table -->
+            <div id="customerTable"></div>
 
             <!-- US - Person Questions -->
 
@@ -365,6 +388,55 @@ function saveGenerateRedirect() {
     console.log("Navigating to the next page");
     window.location.href = "/endingPage";
   }
+</script>
+
+
+<script>
+  // Script to fetch customer details to the table from the database
+  function fetchCustomerData() {
+    const customerId = document.getElementById('customerId').value;
+
+    fetch(`/getCustomer/${customerId}`)
+      .then(response => response.json())
+      .then(data => populateTable(data))
+      .catch(error => console.error('Error fetching customer data:', error));
+  }
+
+  function populateTable(customerData) {
+    const table = document.createElement('table');
+    table.id = 'customerTable';
+
+    const attributeMap = {
+      firstName: 'Vorname:',
+      lastName: 'Nachname:',
+      birthDate: 'Geburtsdatum:',
+      nationality: 'Nationalitaet:',
+      streetName: 'Wohnadresse:',
+      streetNumber: 'Hausnummer:',
+      plzNumber: 'PLZ/Ort:',
+      country: 'Wohnsitzstaat:',
+      taxCountry: 'Land der unbeschraenkten Steuerpflicht:',
+      taxIdentificationNumber: 'Steueridentifikations-Nr./TIN:',
+      phoneNumber: 'Telefonnummer:',
+      emailAddress: 'E-Mail Adresse:',
+      jobTitle: 'Beruf:'
+    };
+
+    for (const key in attributeMap) {
+      const row = table.insertRow();
+      const cell1 = row.insertCell(0);
+      const cell2 = row.insertCell(1);
+
+      cell1.innerHTML = `<b>${attributeMap[key]}</b>`;
+      cell2.innerHTML = customerData[key] || '-'; // Use '-' if the value is empty or undefined
+    }
+
+    const tableContainer = document.getElementById('customerTable');
+    tableContainer.innerHTML = '';
+    tableContainer.appendChild(table);
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchCustomerData);
 </script>
 
 </body>
