@@ -1,0 +1,39 @@
+@startuml
+
+package "Frontend" {
+    folder "HTML Templates" {
+        [personalData.html]
+        [dataProtection.html]
+        [informationLetter.html]
+        [economicBeneficiary.html]
+        [selfDisclosure.html]
+        [endingPage.html]
+    }
+    [CSS Styling]
+    [JS Functions]
+}
+
+package "Backend" {
+    package "Controllers" {
+        [Controller]
+        [RestController] --> [Services]
+
+    }
+
+    package "Services" {
+        [Services] --> [Model]
+    }
+
+    package "Models" {
+        [Model] --> [Repository]
+    }
+
+     [ComplianceFormsApplication] --> [Controller]
+}
+
+[HTML Templates] --> [Controller] : rendered
+[RestController] --> [HTML Templates] : Rest APIs (Post/Get)
+[CSS Styling] --> [HTML Templates] : styling
+[JS Functions] --> [HTML Templates] : functionality
+
+@enduml
