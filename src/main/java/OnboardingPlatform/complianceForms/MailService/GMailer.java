@@ -1,125 +1,121 @@
 package OnboardingPlatform.complianceForms.MailService;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Properties;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import OnboardingPlatform.complianceForms.model.Customer;
+import OnboardingPlatform.complianceForms.repository.CustomerRepository;
 import OnboardingPlatform.complianceForms.service.CustomerService;
-
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.Message;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
-import java.util.Base64;
+import java.util.Properties;
 import java.util.Set;
+
+import static com.google.api.services.gmail.GmailScopes.GMAIL_SEND;
+import static javax.mail.Message.RecipientType.TO;
 
 @Service
 public class GMailer {
 
-    private static final String admin_email = "demoonboarding8@gmail.com";
+    private static final String TEST_EMAIL = "demoonboarding8@gmail.com";
     private final Gmail service;
-    @Autowired
     private CustomerService customerService;
 
-    public GMailer() throws Exception {
+    // Constructor for dependency injection
+    public GMailer(CustomerService customerService) throws Exception {
+        this.customerService = customerService;
+        this.service = createGmailService(); // Initialize service to null for now
+    }
+
+
+
+    private Gmail createGmailService() throws Exception {
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-        service = new Gmail.Builder(httpTransport, jsonFactory, getCredentials(httpTransport, jsonFactory))
+        return new Gmail.Builder(httpTransport, jsonFactory, getCredentials(httpTransport, jsonFactory))
                 .setApplicationName("OnboardingPlatform_Mailer")
                 .build();
     }
 
     // NetHttpTransport and GSONFactory only internally needed in the API
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT, GsonFactory jsonFactory)
+    private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
-        // Load client secrets.
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailer.class.getResourceAsStream("/client_secret_746884760670-bsl9nku7t13712i7ekhd9j8s586n8i1d.apps.googleusercontent.com.json")));
 
-
-        // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, jsonFactory, clientSecrets, Set.of(GmailScopes.GMAIL_SEND)) // scope = what are we authorized to do
+                httpTransport, jsonFactory, clientSecrets, Set.of(GMAIL_SEND))
                 .setDataStoreFactory(new FileDataStoreFactory(Paths.get("tokens").toFile()))
                 .setAccessType("offline")
                 .build();
+
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow,receiver).authorize("user");
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+
 
     public void sendMail(String subject, String message) throws Exception {
         Customer lastCreatedCustomer = customerService.getLastCreatedCustomer();
+        System.out.println(lastCreatedCustomer);
 
         if (lastCreatedCustomer != null) {
-            String recipientEmail = lastCreatedCustomer.getEmailAddress();
+            String recipientEmail = lastCreatedCustomer.getEmailAddress(); // Get recipient email from the last created customer
 
-            // Encode as MIME message
             Properties props = new Properties();
             Session session = Session.getDefaultInstance(props, null);
             MimeMessage email = new MimeMessage(session);
-            email.setFrom(new InternetAddress(admin_email));
-            email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(recipientEmail));
+
+            String senderEmail = "demoonboarding8@gmail.com";
+
+            email.setFrom(new InternetAddress(senderEmail));
+            email.addRecipient(TO, new InternetAddress(recipientEmail));
             email.setSubject(subject);
             email.setText(message);
 
-            // Encode and wrap the MIME message into a gmail message
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             email.writeTo(buffer);
             byte[] rawMessageBytes = buffer.toByteArray();
-            byte[] encodedBytes = Base64.getMimeEncoder().encode(rawMessageBytes); // Use MIME encoder
-
-            String encodedEmail = Base64.getEncoder().encodeToString(encodedBytes); // Convert to Base64-encoded string
-
-            // Set the encoded message in the 'raw' field of the Message object
+            String encodedEmail = Base64.encodeBase64URLSafeString(rawMessageBytes);
             Message msg = new Message();
             msg.setRaw(encodedEmail);
 
             try {
-                // send message
                 msg = service.users().messages().send("me", msg).execute();
                 System.out.println("Message id: " + msg.getId());
                 System.out.println(msg.toPrettyString());
             } catch (GoogleJsonResponseException e) {
-                // Exception handling
+                GoogleJsonError error = e.getDetails();
+                if (error.getCode() == 403) {
+                    System.err.println("Unable to send message: " + e.getDetails());
+                } else {
+                    throw e;
+                }
             }
         } else {
             System.out.println("Last created customer not found.");
         }
+
     }
 
-    public static void sendEmail () throws Exception {
-        System.out.println("Sending email...");
-
-        String subject = "Subject of the email";
-        String message = """
-            Dear reader 
-                
-            Hello World.
-                
-            Best regards,
-            myself
-            """;
-
-        new GMailer().sendMail(subject, message);
-    }
 
 
 
